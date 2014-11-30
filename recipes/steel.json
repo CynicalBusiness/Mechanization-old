@@ -1,0 +1,21 @@
+{
+	"display_name": "&7Steel Smelting",
+	"fuel": 16,
+	"input_format": [
+		" C  C  C ",
+		" CIICIIC ",
+		" C SCS C "
+	],
+	"output_format": [
+		"         ",
+		"  ss ss  ",
+		"   c c   "
+	],
+	"keys": {
+		"C": ["COAL:0:8", "COAL:1:8"],
+		"I": ["IRON_INGOT:0:16"],
+		"S": ["STONE:0:16"],
+		"s": ["!steel:0:8"],
+		"c": ["COBBLESTONE:0:16"]
+	}
+}

@@ -1,0 +1,11 @@
+main: me.capit.mechanization.Mechanization
+version: 1.00R01
+name: Mechanization
+
+prefix: MECHA
+author: Wehttam664
+
+permissions:
+  mechanization.build:
+    description: Permission to construct Mechanization factories.
+      
