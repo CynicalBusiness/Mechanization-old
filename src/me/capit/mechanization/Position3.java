@@ -60,5 +60,25 @@ public class Position3 implements ConfigurationSerializable, Serializable {
 	public void setZ(double z){
 		this.z=z;
 	}
+	
+	public Position3 inverse(){
+		return new Position3(-x,-y,-z);
+	}
+	public Position3 reciprocal(){
+		return new Position3(1/x,1/y,1/z);
+	}
+	
+	public Position3 plus(Position3 pos){
+		return new Position3(x+pos.getX(), y+pos.getY(), z+pos.getZ());
+	}
+	public Position3 minus(Position3 pos){
+		return plus(inverse());
+	}
+	public Position3 times(Position3 pos){
+		return new Position3(x*pos.getX(), y*pos.getY(), z*pos.getZ());
+	}
+	public Position3 divide(Position3 pos){
+		return times(reciprocal());
+	}
 
 }

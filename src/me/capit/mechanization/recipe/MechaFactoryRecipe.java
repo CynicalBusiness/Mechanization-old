@@ -52,6 +52,7 @@ public class MechaFactoryRecipe implements Mechanized, Serializable {
 	}
 	
 	public ItemStack getItemStackByKey(char key){
+		if (key==' ') return new ItemStack(Material.AIR);
 		JSONObject keys = (JSONObject) json.get("keys");
 		if (keys.get(String.valueOf(key))!=null){
 			JSONArray data = (JSONArray) keys.get(String.valueOf(key));

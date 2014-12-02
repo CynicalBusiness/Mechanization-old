@@ -9,6 +9,10 @@ public class FactoryRecipeMatrix {
 				one.getItemMeta().getDisplayName().equals(two.getItemMeta().getDisplayName());
 	}
 	
+	public static boolean itemStackMatchesIgnoreQuantity(ItemStack one, ItemStack two){
+		return one.getType()==two.getType() && one.getItemMeta().getDisplayName().equals(two.getItemMeta().getDisplayName());
+	}
+	
 	private JSONArray matrix;
 	
 	public FactoryRecipeMatrix(JSONArray matrix){
