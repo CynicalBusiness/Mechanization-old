@@ -5,11 +5,13 @@ import java.util.HashMap;
 import java.util.logging.Logger;
 
 import me.capit.mechanization.factory.MechaFactory;
+import me.capit.mechanization.factory.WorldFactory;
 import me.capit.mechanization.item.MechaItem;
 import me.capit.mechanization.recipe.MechaFactoryRecipe;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Mechanization extends JavaPlugin {
@@ -20,10 +22,17 @@ public class Mechanization extends JavaPlugin {
 	public static File pluginDir; public static File itemDir;
 	public static File recipeDir; public static File factoryDir;
 	
+	public static Mechanization plugin;
+	
+	static {
+		ConfigurationSerialization.registerClass(WorldFactory.class);
+	}
+	
 	@Override
 	public void onEnable(){
 		logger = getLogger();
 		console = getServer().getConsoleSender();
+		plugin = this;
 		
 		console.sendMessage(ChatColor.WHITE+"---- "+ChatColor.YELLOW+"Mechanization"+ChatColor.WHITE+" -------------------");
 		

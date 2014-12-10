@@ -16,11 +16,11 @@ import org.bukkit.World;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Furnace;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class WorldFactory implements ConfigurationSerializable {
-	{ConfigurationSerialization.registerClass(WorldFactory.class);}
+	
 	
 	public final String factoryName; private Position3 origin; private World world;
 	private boolean valid = false; private volatile boolean running = false;
@@ -47,7 +47,16 @@ public class WorldFactory implements ConfigurationSerializable {
 					fuel.getType()==Material.COAL && fuel.getAmount()>=recipe.getFuel()))) return false;
 			furnaces.add(f);
 		}
-		// TODO
+		new BukkitRunnable(){
+
+			@Override
+			public void run() {
+				// TODO
+				
+			}
+			
+		}.runTaskLater(Mechanization.plugin, 1L);
+		
 		
 		return true;
 	}
