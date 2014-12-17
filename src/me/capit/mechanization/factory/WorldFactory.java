@@ -34,7 +34,7 @@ public class WorldFactory implements ConfigurationSerializable {
 	public boolean activate(ItemStack activator, Chest chest){
 		validate(chest);
 		if (!valid) return false;
-		MechaFactory fac = Mechanization.factories.get(factoryName);
+		final MechaFactory fac = Mechanization.factories.get(factoryName);
 		if (fac.getActivatorStack()!=null && !FactoryRecipeMatrix.itemStackMatchesIgnoreQuantity(activator, fac.getActivatorStack())) return false;
 		MechaFactoryRecipe recipe = fac.getRecipeFromInput(chest.getBlockInventory());
 		if (recipe==null) return false;
@@ -51,8 +51,13 @@ public class WorldFactory implements ConfigurationSerializable {
 
 			@Override
 			public void run() {
-				// TODO
-				
+				MechaFactoryRecipe rec = fac.getRecipeFromInput(chest.getBlockInventory());
+				int fuel = rec.getFuel();
+				while (rec!=null && valid){
+					// TODO!
+					fac.getRecipeFromInput(chest.getBlockInventory());
+					validate(chest);
+				}
 			}
 			
 		}.runTaskLater(Mechanization.plugin, 1L);
