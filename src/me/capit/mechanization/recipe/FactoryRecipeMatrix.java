@@ -4,6 +4,14 @@ import org.bukkit.inventory.ItemStack;
 import org.json.simple.JSONArray;
 
 public class FactoryRecipeMatrix {
+	public static boolean itemStackMatchesIgnoreMetaAndQuantity(ItemStack one, ItemStack two){
+		return one.getType()==two.getType();
+	}
+	
+	public static boolean itemStackMatchesIgnoreMeta(ItemStack one, ItemStack two){
+		return one.getAmount()==two.getAmount() && one.getType()==two.getType();
+	}
+	
 	public static boolean itemStackMatches(ItemStack one, ItemStack two){
 		return one.getAmount()==two.getAmount() && one.getType()==two.getType() && 
 				one.getItemMeta().getDisplayName().equals(two.getItemMeta().getDisplayName());
