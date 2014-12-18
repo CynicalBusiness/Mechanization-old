@@ -207,4 +207,9 @@ public class MechaFactory implements Mechanized, Serializable {
 	public int getActivatorConsumption(){
 		return (int) json.get("consume_activator");
 	}
+	
+	public void setInventoryToOutput(Inventory inv, MechaFactoryRecipe recipe){
+		if (inv.getSize()!=27) return; // If not a chest.
+		recipe.setInventoryToOutput(inv);
+	}
 }
