@@ -2,6 +2,7 @@ package me.capit.mechanization.factory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import me.capit.mechanization.Mechanization;
 import me.capit.mechanization.Position3;
@@ -75,13 +76,33 @@ public class WorldFactory {
 			@Override
 			public void run() {
 				MechaFactoryRecipe rec = getInputRecipe();
-				if (rec==null) return;
+				if (rec==null || running) return;
 				int fuelOffset = 0;
-				while (rec!=null && valid() && validFurnacesForRecipe(rec, fuelOffset)){
-					// TODO!
+				running = true;
+				while (rec!=null && valid() && validFurnacesForRecipe(rec, fuelOffset) && rec.getFuel()>fuelOffset){
+					try {
+						for (Furnace f : getFurnaces()){
+							ItemStack fuelIS = f.getInventory().getFuel();
+							if (fuelIS.getAmount()>1){
+								fuelIS.setAmount(fuelIS.getAmount()-1);
+							} else {
+								fuelIS.setType(Material.AIR);
+							}
+							f.getInventory().setFuel(fuelIS);
+							f.setBurnTime((short) factory.getTimePerFuel());
+						}
+						TimeUnit.SECONDS.sleep(factory.getTimePerFuel());
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+						break;
+					}
 					rec = getInputRecipe();
-					fuelOffset--;
+					fuelOffset++;
 				}
+				if (rec!=null && valid() && validFurnacesForRecipe(rec, fuelOffset) && rec.getFuel()==fuelOffset){
+					rec.setInventoryToOutput(chest.getBlockInventory());
+				}
+				running = false;
 			}
 		}.runTaskLater(Mechanization.plugin, 1L);
 	}
@@ -102,10 +123,10 @@ public class WorldFactory {
 	
 	public boolean validFurnacesForRecipe(MechaFactoryRecipe recipe, int fuelOffset){
 		for (Furnace fur : getFurnaces()){
-			Furnace f = (Furnace) world.getBlockAt((int) fur.getX(), (int) fur.getY(), (int) fur.getZ());
-			ItemStack fuel = f.getInventory().getFuel(); ItemStack fIn = f.getInventory().getSmelting();
-			if (!((fIn==null || fIn.getType()==Material.AIR) && (fuel!=null && 
-					fuel.getType()==Material.COAL && fuel.getAmount()>=recipe.getFuel()-fuelOffset))) return false;
+			FurnaceInventory inv = fur.getInventory();
+			if (!(inv.getSmelting()==null || inv.getSmelting().getType()==Material.AIR)) return false; 
+			ItemStack fuelIS = fur.getInventory().getFuel();
+			if (fuelIS==null || fuelIS.getType()!=Material.COAL || fuelIS.getAmount()<recipe.getFuel()-fuelOffset) return false;
 		}
 		return true;
 	}
