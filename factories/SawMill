@@ -1,0 +1,37 @@
+ {
+	"display_name": "&7Saw Mill",
+	"time_per_fuel": 4,
+	
+	"activator": "!factory_wrench",
+	"consume_activator": 0,
+	"damage_activator": 1,
+	"capture_events": true,
+	
+	"recipes": ["oak_planks","dark_oak_planks","acacia_planks","spruce_planks","birch_Planks"],
+	
+	"height": 3,
+	"width": 5,
+	"depth": 2,
+	"chest": [2,0,0],
+	
+	"format": [
+		[
+			"WP@PW",
+			"LSRSL"
+		],[
+			"WF*FW",
+			"LIIIL"
+		],[
+			"LF*FL",
+			"LSLSL"
+		]
+	],
+	
+	"keys": {
+		"W": ["COBBLE_WALL:0","COBBLE_WALL:1"],
+		"L": ["LOG:0", "LOG:1", "LOG:2", "LOG:3", "LOG_2:0", "LOG_2:1"],
+		"F": ["FENCE:0"],
+		"I": ["IRON_BLOCK:0"],
+		"S": ["FURNACE:0"]
+	}
+}

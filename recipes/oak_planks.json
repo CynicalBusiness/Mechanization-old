@@ -1,0 +1,19 @@
+{
+	"display_name": "&7Oak wood cutting",
+	"fuel": 4,
+	"input_format": [
+		" C  L  C ",
+		"         ",
+		"         "
+	],
+	"output_format": [
+		"pppppp   ",
+		"         ",
+		"         "
+	],
+	"keys": {
+		"C": ["COAL:0:4", "COAL:1:4"],
+		"L": ["OAK_LOG:0:64"],
+		"p": ["PLANK:0:64"]
+	}
+}
