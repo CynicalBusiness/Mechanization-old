@@ -13,6 +13,11 @@ public class RecipeMatrix {
 				one.getDurability() == one.getDurability();
 	}
 	
+	public static boolean itemStackMatchesIgnoreQuantityAndDurability(ItemStack one, ItemStack two){
+		return one.getType()==two.getType() && 
+				one.getItemMeta().getDisplayName().equals(two.getItemMeta().getDisplayName());
+	}
+	
 	public static boolean itemStackMatchesIgnoreDurability(ItemStack one, ItemStack two){
 		return one.getAmount()==two.getAmount() && one.getType()==two.getType() && 
 				one.getItemMeta().getDisplayName().equals(two.getItemMeta().getDisplayName());

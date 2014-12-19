@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 
 import me.capit.mechanization.exception.MechaException;
 import me.capit.mechanization.factory.MechaFactory;
-import me.capit.mechanization.factory.WorldFactory;
 import me.capit.mechanization.item.MechaItem;
 import me.capit.mechanization.recipe.MechaFactoryRecipe;
 
@@ -32,7 +31,6 @@ public class Mechanization extends JavaPlugin {
 	public static Mechanization plugin;
 	
 	static {
-		ConfigurationSerialization.registerClass(WorldFactory.class);
 		ConfigurationSerialization.registerClass(Position3.class);
 	}
 	

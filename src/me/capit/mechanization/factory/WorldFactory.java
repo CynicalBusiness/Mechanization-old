@@ -1,29 +1,24 @@
 package me.capit.mechanization.factory;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import me.capit.mechanization.Mechanization;
 import me.capit.mechanization.Position3;
+import me.capit.mechanization.exception.MechaException;
 import me.capit.mechanization.recipe.RecipeMatrix;
 import me.capit.mechanization.recipe.MechaFactoryRecipe;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Furnace;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.FurnaceInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class WorldFactory implements ConfigurationSerializable {
+public class WorldFactory {
 	public static boolean takeFurnaceFuel(Furnace f){
 		return takeFurnaceFuel(f,1);
 	}
@@ -41,63 +36,55 @@ public class WorldFactory implements ConfigurationSerializable {
 		return false;
 	}
 	
-	public final String factoryName;
-	private Position3 origin;
-	private World world;
+	private final MechaFactory factory;
+	private final Position3 origin;
+	private final World world;
+	private final Chest chest;
 	private volatile boolean running = false;
 	
-	public WorldFactory(Map<String, Object> data){
-		factoryName = (String) data.get("FACTORY");
-		origin = (Position3) data.get("POSITION");
-		world = Bukkit.getWorld((String) data.get("WORLD"));
+	public static WorldFactory getFactoryAtChest(ItemStack activator, Chest chest){
+		for (String f : Mechanization.factories.keySet()){
+			try {
+				return new WorldFactory(f,activator,chest);
+			} catch (MechaException e){
+				// Do nothing.
+			}
+		}
+		return null;
 	}
 	
-	// TODO Gotta make sure this works!
-	public boolean activate(ItemStack activator, final Chest chest){
-		if (!valid(chest)) return false;
-		final MechaFactory fac = Mechanization.factories.get(factoryName);
-		if (fac.getActivator()!=null && !RecipeMatrix.itemStackMatchesIgnoreQuantity(activator, fac.getActivator())) return false;
-		final MechaFactoryRecipe recipe = fac.getRecipeFromInput(chest.getBlockInventory());
-		if (recipe==null || !validFurnaces(fac, recipe, chest)) return false;
-		final List<Furnace> furnaces = getFurnaces(fac, chest);
-		
+	public WorldFactory(String factory, ItemStack activator, Chest chest) throws MechaException {
+		MechaFactory fac = Mechanization.factories.get(factory);
+		try {
+			if (!(fac.getActivatorDamage()>0
+					? RecipeMatrix.itemStackMatchesIgnoreQuantity(activator, fac.getActivator())
+					: RecipeMatrix.itemStackMatchesIgnoreQuantityAndDurability(activator, fac.getActivator())))
+				throw null;
+			this.factory = fac;
+			origin = new Position3(chest.getX(),chest.getY(),chest.getZ()).minus(
+					fac.getMatrix().getChestLocation().times(getRelativityFrom(chest)));
+			world = chest.getWorld();
+			this.chest = chest;
+		} catch (NullPointerException e){
+			throw new MechaException();
+		}
+	}
+	
+	// TODO Build this!
+	public void activate(){
 		new BukkitRunnable(){
 
 			@Override
 			public void run() {
-				int fuel = recipe.getFuel();
-				int fuelOff = fuel;
-				MechaFactoryRecipe rec = recipe;
-				while (rec!=null && valid(chest) && validFurnaces(fac, recipe, chest, fuelOff-fuel) && fuel>0){
-					int time = fac.getTimePerFuel();
-					for (Furnace f : furnaces){
-						f.setBurnTime((short) time);
-						takeFurnaceFuel(f);
-					}
-					try {
-						TimeUnit.SECONDS.sleep((long) time);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-						break;
-					}
-					rec = fac.getRecipeFromInput(chest.getBlockInventory());
-					fuel--;
-				}
-				if (fuel==0 && rec!=null && valid(chest)){
-					fac.setInventoryToOutput(chest.getBlockInventory(), rec);
-					world.playSound(chest.getLocation(),Sound.LEVEL_UP, 1, 1);
-				}
+				
 			}
 			
 		}.runTaskLater(Mechanization.plugin, 1L);
-		
-		
-		return true;
 	}
 	
-	public List<Furnace> getFurnaces(MechaFactory fac, Chest chest){
+	public List<Furnace> getFurnaces(){
 		List<Furnace> furnaces = new ArrayList<Furnace>();
-		for (Position3 fur : fac.getFurnaceLocations(getRelativityFrom(chest))){
+		for (Position3 fur : factory.getFurnaceLocations(getRelativityFrom(chest))){
 			fur = fur.plus(origin);
 			Furnace f = (Furnace) world.getBlockAt((int) fur.getX(),(int) fur.getY(),(int) fur.getZ());
 			furnaces.add(f);
@@ -105,8 +92,8 @@ public class WorldFactory implements ConfigurationSerializable {
 		return furnaces;
 	}
 	
-	public boolean validFurnaces(MechaFactory fac, MechaFactoryRecipe recipe, Chest chest, int fuelOffset){
-		for (Furnace fur : getFurnaces(fac,chest)){
+	public boolean validFurnacesForRecipe(MechaFactoryRecipe recipe, int fuelOffset){
+		for (Furnace fur : getFurnaces()){
 			Furnace f = (Furnace) world.getBlockAt((int) fur.getX(), (int) fur.getY(), (int) fur.getZ());
 			ItemStack fuel = f.getInventory().getFuel(); ItemStack fIn = f.getInventory().getSmelting();
 			if (!((fIn==null || fIn.getType()==Material.AIR) && (fuel!=null && 
@@ -115,8 +102,8 @@ public class WorldFactory implements ConfigurationSerializable {
 		return true;
 	}
 	
-	public boolean validFurnaces(MechaFactory fac, MechaFactoryRecipe recipe, Chest chest){
-		return validFurnaces(fac, recipe, chest, 0);
+	public boolean validFurnacesForRecipe(MechaFactoryRecipe recipe){
+		return validFurnacesForRecipe(recipe,0);
 	}
 	
 	public Location getOriginLocation(){
@@ -129,20 +116,11 @@ public class WorldFactory implements ConfigurationSerializable {
 	}
 	
 	public MechaFactory getFactory(){
-		return Mechanization.factories.get(factoryName);
+		return factory;
 	}
 	
 	public boolean isRunning(){
 		return running;
-	}
-	
-	@Override
-	public Map<String, Object> serialize() {
-		Map<String, Object> data = new HashMap<String, Object>();
-		data.put("FACTORY", factoryName);
-		data.put("POSITION", origin);
-		data.put("WORLD", world.getName());
-		return data;
 	}
 	
 	public Position3 getRelativityFrom(Chest chest){
