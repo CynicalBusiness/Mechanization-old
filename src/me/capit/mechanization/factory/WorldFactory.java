@@ -62,29 +62,37 @@ public class WorldFactory {
 				throw null;
 			this.factory = fac;
 			origin = new Position3(chest.getX(),chest.getY(),chest.getZ()).minus(
-					fac.getMatrix().getChestLocation().times(getRelativityFrom(chest)));
+					fac.getMatrix().getChestLocation().times(getRelativity()));
 			world = chest.getWorld();
 			this.chest = chest;
 		} catch (NullPointerException e){
 			throw new MechaException();
 		}
 	}
-	
-	// TODO Build this!
+
 	public void activate(){
 		new BukkitRunnable(){
-
 			@Override
 			public void run() {
-				
+				MechaFactoryRecipe rec = getInputRecipe();
+				if (rec==null) return;
+				int fuelOffset = 0;
+				while (rec!=null && valid() && validFurnacesForRecipe(rec, fuelOffset)){
+					// TODO!
+					rec = getInputRecipe();
+					fuelOffset--;
+				}
 			}
-			
 		}.runTaskLater(Mechanization.plugin, 1L);
+	}
+	
+	public MechaFactoryRecipe getInputRecipe(){
+		return factory.getRecipeFromInput(chest.getBlockInventory());
 	}
 	
 	public List<Furnace> getFurnaces(){
 		List<Furnace> furnaces = new ArrayList<Furnace>();
-		for (Position3 fur : factory.getFurnaceLocations(getRelativityFrom(chest))){
+		for (Position3 fur : factory.getFurnaceLocations(getRelativity())){
 			fur = fur.plus(origin);
 			Furnace f = (Furnace) world.getBlockAt((int) fur.getX(),(int) fur.getY(),(int) fur.getZ());
 			furnaces.add(f);
@@ -110,9 +118,9 @@ public class WorldFactory {
 		return new Location(world,origin.getX(),origin.getY(),origin.getZ());
 	}
 	
-	public boolean valid(Chest chest){
+	public boolean valid(){
 		MechaFactory fac = getFactory();
-		return fac!=null && fac.validForLocation(getOriginLocation(), getRelativityFrom(chest));
+		return fac!=null && fac.validForLocation(getOriginLocation(), getRelativity());
 	}
 	
 	public MechaFactory getFactory(){
@@ -123,7 +131,7 @@ public class WorldFactory {
 		return running;
 	}
 	
-	public Position3 getRelativityFrom(Chest chest){
+	public Position3 getRelativity(){
 		Position3 rel = new Position3(0,1,0);
 		switch(((org.bukkit.material.Chest) chest.getBlock()).getFacing()){
 		case NORTH:
