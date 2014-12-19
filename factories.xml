@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <factories>
-    <factory name=foundry>
-	    <meta display=Foundry color=GRAY description="A basic metals factory."/>
+    <factory name="foundry">
+	    <meta display="Foundry" color="GRAY" description="A basic metals factory."/>
 	    	<!-- Do not include colors in the diplay name!
 	    		 Colors should be of https://hub.spigotmc.org/javadocs/spigot/org/bukkit/ChatColor.html -->
-	    <data fuel_time=4 activator="!factory_wrench" consume=0 damage=1 capture_events=true/>
+	    <data fuel_time="4" activator="!factory_wrench" consume="0" damage="1" capture_events="true"/>
 	    	<!-- Activators can use custom items: simply preceede the name with '!'. -->
 	    <recipes>
 	        steel
 	    </recipes>
-	    <matrix width=5, height=3 depth=2 chestX=2 chestY=0 chestZ=0>
+	    <matrix width="5" height="3" depth="2" chestX="2" chestY="0" chestZ="0">
 	        <!-- Width, height, and depth are X, Y, and Z respectively. 0,0,0 is the lower-left corner closest to the front. -->
 	        <!-- You must have the correct number of matrix axies per these values. -->
 	        <!-- Names in the matrix MUST match those at https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html -->
@@ -17,50 +17,50 @@
 	            <matrixZ>
 	                <!-- If 'material' or 'data' is not defined, the space may have any material/data respectively. -->
 	                <!-- Some aliasing occurs. LOG_2 will work for LOG, BURNING_FURNACE will work for FURNACE, etc. -->
-	                <matrixX material=COBBLE_WALL data=0/>
-	                <matrixX material=ANVIL/>
-	                <matrixX material=CHEST/><!-- Because this is 2,0,0 in the matrix, this must be a chest, as defined above. -->
-	                <matrixX material=ANVIL/>
-	                <matrixX material=COBBLE_WALL data=0/>
+	                <matrixX material="COBBLE_WALL" data="0"/>
+	                <matrixX material="ANVIL"/>
+	                <matrixX material="CHEST"/><!-- Because this is 2,0,0 in the matrix, this must be a chest, as defined above. -->
+	                <matrixX material="ANVIL"/>
+	                <matrixX material="COBBLE_WALL" data="0"/>
 	            </matrixZ>
 	            <matrixZ>
-	                <matrixX material=LOG/>
-	                <matrixX material=FURNACE/>
-	                <matrixX material=REDSTONE_BLOCK/>
-	                <matrixX material=FURNACE/>
-	                <matrixX material=LOG/>
+	                <matrixX material="LOG"/>
+	                <matrixX material="FURNACE"/>
+	                <matrixX material="REDSTONE_BLOCK"/>
+	                <matrixX material="FURNACE"/>
+	                <matrixX material="LOG"/>
 	            </matrixZ>
 	        </matrixY>
 	        <matrixY>
 	            <matrixZ>
-	                <matrixX material=COBBLE_WALL data=0/>
-	                <matrixX material=FENCE"/>
+	                <matrixX material="COBBLE_WALL" data="0"/>
+	                <matrixX material="FENCE"/>
 	                <matrixX/><!-- This is a wildcard matrixX. ANY BLOCK may be placed at this location! -->
-	                <matrixX material=FENCE/>
-	                <matrixX material=COBBLE_WALL data=0/>
+	                <matrixX material="FENCE"/>
+	                <matrixX material="COBBLE_WALL" data="0"/>
 	            </matrixZ>
 	            <matrixZ>
-	                <matrixX material=LOG/>
-	                <matrixX material=GOLD_BLOCK/>
-	                <matrixX material=IRON_BLOCK/>
-	                <matrixX material=GOLD_BLOCK/>
-	                <matrixX material=LOG/>
+	                <matrixX material="LOG"/>
+	                <matrixX material="GOLD_BLOCK"/>
+	                <matrixX material="IRON_BLOCK"/>
+	                <matrixX material="GOLD_BLOCK"/>
+	                <matrixX material="LOG"/>
 	            </matrixZ>
 	        </matrixY>
 	        <matrixY>
 	            <matrixZ>
-	                <matrixX material=LAPIS_BLOCK/>
-	                <matrixX material=FENCE/>
+	                <matrixX material="LAPIS_BLOCK"/>
+	                <matrixX material="FENCE"/>
 	                <matrixX/>
-	                <matrixX material=FENCE/>
-	                <matrixX material=LAPIS_BLOCK/>
+	                <matrixX material="FENCE"/>
+	                <matrixX material="LAPIS_BLOCK"/>
 	            </matrixZ>
 	            <matrixZ>
-	                <matrixX material=LOG/>
-	                <matrixX material=FURNACE/>
-	                <matrixX material=OBSIDIAN/>
-	                <matrixX material=FURNACE/>
-	                <matrixX material=LOG/>
+	                <matrixX material="LOG"/>
+	                <matrixX material="FURNACE"/>
+	                <matrixX material="OBSIDIAN"/>
+	                <matrixX material="FURNACE"/>
+	                <matrixX material="LOG"/>
 	            </matrixZ>
 	        </matrixY>
 	    </matrix>
