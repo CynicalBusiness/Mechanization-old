@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<recipes>
+    <recipe name="steel">
+        <meta display="&8Steel &7Smelting" description="Smelts steel from iron and coal." fuel_cost=16/>
+        <input matrix=" C  C  C , CIICIIC , C SCS C "/>
+        <output matrix="         ,  ss ss  ,   c c   "/>
+        <keys>
+            <!-- Like the factory matrix, any non-specified material/data will match any material/data respectively. -->
+            <!-- Precede materials with an '!' to use custom items defined in the items.xml file. -->
+            <!-- A comma (,) cannot be used as a key as it is a row separator. In addition, any undefined tags are treated as AIR. -->
+            <key char="C" material="COAL" amount=8/>
+            <key char="I" material="IRON_INGOT" amount=16/>
+            <key char="S" material="STONE" amount=16/>
+            <key char="s" material="!steel" amount=8/>
+            <key char="c" material="COBBLESTONE" amount=16/>
+        </keys>
+    </recipe>
+</recipes>

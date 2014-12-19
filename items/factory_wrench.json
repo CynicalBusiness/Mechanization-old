@@ -1,9 +1,0 @@
-{
-	"display_name": "&7Factory Wrench",
-	"root_item": "IRON_HOE",
-	"root_item_dmg": 0
-	"lore": [
-		"&fA wrench used to start",
-		"&fadvanced factories."
-	]
-}

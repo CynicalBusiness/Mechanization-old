@@ -1,36 +1,37 @@
 package me.capit.mechanization.item;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.jdom2.Element;
 
-import me.capit.mechanization.Mechanization;
 import me.capit.mechanization.Mechanized;
+import me.capit.mechanization.exception.MechaException;
 
 public class MechaItem implements Mechanized, Serializable {
 	private static final long serialVersionUID = 3159299245146020959L;
-	private final String name;
-	private JSONParser p = new JSONParser();
-	private JSONObject json;
+	private final String name, displayName, lore;
+	private final Material baseMaterial;
+	private final int baseData;
 	
-	public MechaItem(File file){
-		name = file.getName().replaceFirst("[.][^.]+$", "");
+	public MechaItem(Element element) throws MechaException {
+		if (!element.getName().equals("item")) throw new MechaException().new InvalidElementException("item", element.getName());
+		if (element.getAttribute("name")==null) throw new MechaException().new MechaNameNullException();
+		name = element.getAttributeValue("name");
 		try {
-			FileReader reader = new FileReader(file);
-			json = (JSONObject) p.parse(reader);
-		} catch (IOException | ParseException | NullPointerException e) {
-			e.printStackTrace();
+			Element meta = element.getChild("meta");
+			if (meta.getAttribute("display")!=null) displayName = meta.getAttributeValue("display"); else throw null;
+			if (meta.getAttribute("lore")!=null) lore = meta.getAttributeValue("lore"); else throw null;
+			
+			Element data = element.getChild("data");
+			if (data.getAttribute("material")!=null) baseMaterial = Material.valueOf(meta.getAttributeValue("material")); else throw null;
+			baseData = data.getAttribute("data") !=null ? Integer.parseInt(data.getAttributeValue("data")) : 0;
+		} catch (NullPointerException | IllegalArgumentException e){
+			throw new MechaException().new MechaAttributeInvalidException("Null or invalid tag/attribute value for item "+name+"!");
 		}
 	}
 	
@@ -41,42 +42,31 @@ public class MechaItem implements Mechanized, Serializable {
 
 	@Override
 	public String getDisplayName() {
-		try {
-			return (String) json.get("display_name");
-		} catch (NullPointerException | ClassCastException e){
-			Mechanization.logger.warning("Unable to fetch display name.");
-			e.printStackTrace();
-			return "";
-		}
+		return ChatColor.translateAlternateColorCodes('&', displayName);
 	}
 	
+	public String getLore(){
+		return ChatColor.translateAlternateColorCodes('&', lore);
+	}
+	
+	public Material getBaseMaterial(){
+		return baseMaterial;
+	}
+	
+	public int getBaseData(){
+		return baseData;
+	}
 	
 	public ItemStack getItemStack(){return getItemStack(1);}
 	public ItemStack getItemStack(int amount){
-		try {
-			ItemStack is = new ItemStack(Material.valueOf((String) json.get("root_item")), amount);
-			is.setDurability((Short) json.get("root_item_dmg"));
+		ItemStack is = new ItemStack(getBaseMaterial(), amount);
+		is.setDurability((short) getBaseData());
 			
-			ItemMeta im = is.getItemMeta();
-			JSONArray lore = (JSONArray) json.get("lore");
-			List<String> loreA = new ArrayList<String>();
-			for (Object s : lore){
-				loreA.add((String) s);
-			}
-			im.setLore(loreA);
-			im.setDisplayName((String) json.get("display_name"));
+		ItemMeta im = is.getItemMeta();
+		im.setLore(Arrays.asList(getLore()));
+		im.setDisplayName(getDisplayName());
 			
-			is.setItemMeta(im);
-			return is;
-		} catch (NullPointerException | ClassCastException e){
-			Mechanization.logger.warning("Unable to create item stack.");
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	@Override
-	public JSONObject getJSON() {
-		return json;
+		is.setItemMeta(im);
+		return is;
 	}
 }

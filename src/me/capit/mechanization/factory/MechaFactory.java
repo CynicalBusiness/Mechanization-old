@@ -1,41 +1,65 @@
 package me.capit.mechanization.factory;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.md_5.bungee.api.ChatColor;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.Chest;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.jdom2.Element;
 
 import me.capit.mechanization.Mechanization;
 import me.capit.mechanization.Mechanized;
 import me.capit.mechanization.Position3;
+import me.capit.mechanization.exception.MechaException;
+import me.capit.mechanization.recipe.RecipeMatrix;
 import me.capit.mechanization.recipe.MechaFactoryRecipe;
 
 public class MechaFactory implements Mechanized, Serializable {
 	private static final long serialVersionUID = -6430047152764487993L;
-	private final String name; private JSONObject json; private Position3 chestLoc;
-	private JSONParser p = new JSONParser();
+	private final String name, displayName, description;
+	private final ChatColor color;
+	private final ItemStack activator;
+	private final int fuelTime,consume,damage;
+	private final boolean captureEvents;
+	private final List<MechaFactoryRecipe> recipes;
+	private final FactoryMatrix matrix;
 	
-	public MechaFactory(File file){
-		name = file.getName().replaceFirst("[.][^.]+$", "");
+	public MechaFactory(Element element) throws MechaException {
+		if (!element.getName().equals("factory")) throw new MechaException().new InvalidElementException("factory", element.getName());
+		if (element.getAttribute("name")==null) throw new MechaException().new MechaNameNullException();
+		name = element.getAttributeValue("name");
+		
 		try {
-			FileReader reader = new FileReader(file);
-			json = (JSONObject) p.parse(reader);
-			chestLoc = Position3.fromList((JSONArray) json.get("chest"));
-		} catch (IOException | ParseException | NullPointerException e) {
-			e.printStackTrace();
+			Element meta = element.getChild("meta");
+			if (meta.getAttribute("display")!=null) displayName = meta.getAttributeValue("display"); else throw null;
+			if (meta.getAttribute("description")!=null) description = meta.getAttributeValue("description"); else throw null;
+			color = meta.getAttribute("color")!=null ? ChatColor.valueOf(meta.getAttributeValue("color")) : ChatColor.WHITE;
+			
+			Element data = element.getChild("data");
+			if (data.getAttribute("fuel_time")!=null) fuelTime = Integer.parseInt(data.getAttributeValue("fuel_time")); else throw null;
+			if (data.getAttribute("activator")==null) throw null;
+				else if (data.getAttributeValue("activator").startsWith("!")) {
+					activator = Mechanization.items.get(meta.getAttributeValue("activator").substring(1)).getItemStack();
+				} else {
+					activator = new ItemStack(Material.valueOf(meta.getAttributeValue("activator")),1);
+				}
+			damage = data.getAttribute("damage")!=null ? Integer.parseInt(data.getAttributeValue("damage")) : 0;
+			consume = data.getAttribute("consume")!=null ? Integer.parseInt(data.getAttributeValue("consume")) : 0;
+			captureEvents = data.getAttribute("capture_events")!=null ? Boolean.parseBoolean(data.getAttributeValue("capture_events")) : true;
+			
+			Element recs = element.getChild("recipes");
+			recipes = new ArrayList<MechaFactoryRecipe>();
+			for (String rec : recs.getValue().split(",")) recipes.add(Mechanization.recipes.get(rec));
+			
+			matrix = new FactoryMatrix(element.getChild("matrix"));
+		} catch (NullPointerException | IllegalArgumentException e){
+			throw new MechaException().new MechaAttributeInvalidException("Null or invalid tag/attribute value for item "+name+"!");
 		}
 	}
 	
@@ -46,170 +70,101 @@ public class MechaFactory implements Mechanized, Serializable {
 
 	@Override
 	public String getDisplayName() {
-		return (String) json.get("display_name");
+		return color+displayName;
 	}
-
-	@Override
-	public JSONObject getJSON() {
-		return json;
+	
+	public ChatColor getColor(){
+		return color;
 	}
 	
 	public int getTimePerFuel(){
-		return (int) json.get("time_per_fuel");
+		return fuelTime;
 	}
 	
-	public boolean formatMatchesDims(){
-		JSONArray format = (JSONArray) json.get("format");
-		if (format.size()!=(int) json.get("height")) return false;
-		for (Object o1 : format){
-			JSONArray arr = (JSONArray) o1;
-			if (arr.size()!=(int) json.get("depth")) return false;
-			for (Object o2 : arr){
-				String str = (String) o2;
-				if (str.length()!=(int) json.get("width")) return false;
-			}
+	public String getDescription(){
+		return description;
+	}
+	
+	public ItemStack getActivator(){
+		return activator;
+	}
+	
+	public FactoryMatrix getMatrix(){
+		return matrix;
+	}
+	
+	public boolean doesCaptureEvents(){
+		return captureEvents;
+	}
+	
+	public boolean validActivator(ItemStack is){
+		return RecipeMatrix.itemStackMatchesIgnoreQuantity(is, activator);
+	}
+	
+	public boolean applyActivatorEffects(ItemStack is){
+		if (is.getAmount()==consume){
+			is.setType(Material.AIR);
+			return true;
+		} else if (is.getAmount()>consume) {
+			is.setAmount(is.getAmount()-consume);
+			is.setDurability((short) (is.getDurability() - damage));
+			return true;
 		}
-		JSONArray first = (JSONArray) format.get((int) chestLoc.getY());
-		String line = (String) first.get((int) chestLoc.getZ());
-		if (line.charAt((int) chestLoc.getX())!='@') return false;
+		return false;
+	}
+	
+	@SuppressWarnings("deprecation")
+	public boolean blockMatchesAtLocation(Block block, Position3 pos){
+		ItemStack is = matrix.getItemStackAtPosition(pos);
+		if (is==null) return true;
+		if (is.getType()!=block.getType()) return false;
+		if (matrix.elementAtPositionRequriesData(pos) && block.getData()!=(byte) is.getDurability()) return false;
 		return true;
 	}
 	
 	@SuppressWarnings("deprecation")
-	public boolean blockMatchesKey(char key, Block block){
-		JSONObject keys = (JSONObject) json.get("keys");
-		JSONArray blocks = (JSONArray) keys.get(String.valueOf(key));
-		for (Object o : blocks){
-			String data = (String) o;
-			if (block.getType()==Material.valueOf(data.split(":")[1]) && block.getData()==Byte.parseByte(data.split(":")[1])) return true;
-		}
-		return false;
-	}
-	
-	public boolean materialMatchesKey(char key, Material mat){
-		JSONObject keys = (JSONObject) json.get("keys");
-		JSONArray blocks = (JSONArray) keys.get(String.valueOf(key));
-		for (Object o : blocks){
-			String data = (String) o;
-			if (mat==Material.valueOf(data.split(":")[1])) return true;
-		}
-		return false;
-	}
-	
-	public char getKeyFromMaterial(Material mat){
-		JSONObject keys = (JSONObject) json.get("keys");
-		for (Object ks : keys.keySet()){
-			String k = (String) ks;
-			if (materialMatchesKey(k.charAt(0), mat)) return k.charAt(0);
-		}
-		return ' ';
-	}
-	
-	public List<Material> getMaterialsOfKey(char key){
-		List<Material> mats = new ArrayList<Material>();
-		if (key==' '){ mats.add(Material.AIR); return mats;}
-		JSONObject keys = (JSONObject) json.get("keys");
-		JSONArray matA = (JSONArray) keys.get(String.valueOf(key));
-		for (Object os : matA){
-			mats.add(Material.valueOf(((String) os).split(":")[0]));
-		}
-		return mats;
-	}
-	
-	public Position3 getRelativityFrom(Chest chest){
-		Position3 rel = new Position3(0,1,0);
-		switch(((org.bukkit.material.Chest) chest.getBlock()).getFacing()){
-		case NORTH:
-			rel.setX(-1);
-			break;
-		case SOUTH:
-			rel.setX(1);
-			break;
-		case WEST:
-			rel.setZ(-1);
-			break;
-		case EAST:
-			rel.setZ(1);
-			break;
-		default:
-			break;
-		}
-		return rel;
-	}
-	
-	public boolean validAtChestLocation(Location loc){
-		Block b = loc.getBlock();
-		return b.getType()==Material.CHEST ? chestValid((Chest) b) : false;
-	}
-	
-	public boolean chestValid(Chest chest){
-		Position3 rel = getRelativityFrom(chest);
-		Location origin = new Location(chest.getWorld(),
-				chest.getX()-(chestLoc.getX()*-rel.getX()),
-				chest.getY()-(chestLoc.getY()*-rel.getY()),
-				chest.getZ()-(chestLoc.getZ()*-rel.getZ()));
-		JSONArray Ys = (JSONArray) json.get("format");
-		for (int y=0; y<(int) json.get("height"); y++){
-			JSONArray Zs = (JSONArray) Ys.get(y);
-			for (int z=0; z<(int) json.get("depth"); z++){
-				String Xs = (String) Zs.get(z);
-				for (int x=0; x<(int) json.get("width"); x++){
-					Location current = new Location(origin.getWorld(),
-							origin.getX()+(x*rel.getX()),
-							origin.getY()+(y*rel.getY()),
-							origin.getZ()+(z*rel.getZ()));
-					if (!blockMatchesKey(Xs.charAt(x), current.getBlock())) return false;
+	public boolean validForLocation(Location origin, Position3 relativity){
+		for (int x=0; x<matrix.getDims().getX(); x++){
+			for (int y=0; y<matrix.getDims().getY(); y++){
+				for (int z=0; z<matrix.getDims().getZ(); z++){
+					Position3 pos = new Position3(x,y,z);
+					Position3 relpos = pos.times(relativity);
+					Block b = origin.getWorld().getBlockAt(
+							origin.getBlockX()+(int) relpos.getX(), 
+							origin.getBlockY()+(int) relpos.getY(), 
+							origin.getBlockZ()+(int) relpos.getZ());
+					if (matrix.getMaterialAtPosition(pos)!=null && b.getType()!=matrix.getMaterialAtPosition(pos)) return false;
+					if (matrix.getDurabilityAtPosition(pos)>-1 && b.getData()!=matrix.getDurabilityAtPosition(pos)) return false;
 				}
 			}
 		}
 		return true;
 	}
 	
+	public List<MechaFactoryRecipe> getRecipes(){
+		return recipes;
+	}
+	
 	public MechaFactoryRecipe getRecipeFromInput(Inventory input){
-		JSONArray recipes = (JSONArray) json.get("recipes");
-		for (Object o : recipes){
-			String recipe = (String) o;
-			if (Mechanization.recipes.containsKey(recipe) && Mechanization.recipes.get(recipe).inputMatches(input)) 
-				return Mechanization.recipes.get(recipe);
+		for (MechaFactoryRecipe recipe : recipes){
+			if (recipe.inventoryMatchesInput(input)) return recipe;
 		}
 		return null;
 	}
 	
-	public List<Position3> getFurnaceLocations(){
-		List<Position3> furnaces = new ArrayList<Position3>();
-		JSONArray Ys = (JSONArray) json.get("format");
-		for (int y=0; y<(int) json.get("height"); y++){
-			JSONArray Zs = (JSONArray) Ys.get(y);
-			for (int z=0; z<(int) json.get("depth"); z++){
-				String Xs = (String) Zs.get(z);
-				for (int x=0; x<(int) json.get("width"); x++){
-					if (getMaterialsOfKey(Xs.charAt(x)).contains(Material.FURNACE)){
-						furnaces.add(new Position3(x,y,z));
-					}
-				}
-			}
-		}
-		return furnaces;
-	}
-	
-	public ItemStack getActivatorStack(){
-		String a = (String) json.get("activator");
-		if (a.equalsIgnoreCase("null")) return null;
-		return a.startsWith("!") ?
-				(Mechanization.items.containsKey(a.substring(1)) ? Mechanization.items.get(a.substring(1)).getItemStack() : null) : 
-				new ItemStack(Material.valueOf(a));
+	public List<Position3> getFurnaceLocations(Position3 relativity){
+		return matrix.getLocationsOfMaterial(Material.FURNACE, 0, relativity);
 	}
 	
 	public int getActivatorDamage(){
-		return (int) json.get("damage_activator");
+		return damage;
 	}
 	
 	public int getActivatorConsumption(){
-		return (int) json.get("consume_activator");
+		return consume;
 	}
 	
 	public void setInventoryToOutput(Inventory inv, MechaFactoryRecipe recipe){
-		if (inv.getSize()!=27) return; // If not a chest.
-		recipe.setInventoryToOutput(inv);
+		if (inv.getSize()==RecipeMatrix.matrixHeight*RecipeMatrix.matrixWidth) recipe.setInventoryToOutput(inv);
 	}
 }

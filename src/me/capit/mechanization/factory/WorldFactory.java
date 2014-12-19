@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 import me.capit.mechanization.Mechanization;
 import me.capit.mechanization.Position3;
-import me.capit.mechanization.recipe.FactoryRecipeMatrix;
+import me.capit.mechanization.recipe.RecipeMatrix;
 import me.capit.mechanization.recipe.MechaFactoryRecipe;
 
 import org.bukkit.Bukkit;
@@ -41,8 +41,10 @@ public class WorldFactory implements ConfigurationSerializable {
 		return false;
 	}
 	
-	public final String factoryName; private Position3 origin; private World world;
-	private boolean valid = false; private volatile boolean running = false;
+	public final String factoryName;
+	private Position3 origin;
+	private World world;
+	private volatile boolean running = false;
 	
 	public WorldFactory(Map<String, Object> data){
 		factoryName = (String) data.get("FACTORY");
@@ -50,14 +52,14 @@ public class WorldFactory implements ConfigurationSerializable {
 		world = Bukkit.getWorld((String) data.get("WORLD"));
 	}
 	
-	public boolean activate(ItemStack activator, Chest chest){
-		validate(chest);
-		if (!valid) return false;
+	// TODO Gotta make sure this works!
+	public boolean activate(ItemStack activator, final Chest chest){
+		if (!valid(chest)) return false;
 		final MechaFactory fac = Mechanization.factories.get(factoryName);
-		if (fac.getActivatorStack()!=null && !FactoryRecipeMatrix.itemStackMatchesIgnoreQuantity(activator, fac.getActivatorStack())) return false;
+		if (fac.getActivator()!=null && !RecipeMatrix.itemStackMatchesIgnoreQuantity(activator, fac.getActivator())) return false;
 		final MechaFactoryRecipe recipe = fac.getRecipeFromInput(chest.getBlockInventory());
 		if (recipe==null || !validFurnaces(fac, recipe, chest)) return false;
-		List<Furnace> furnaces = getFurnaces(fac, chest);
+		final List<Furnace> furnaces = getFurnaces(fac, chest);
 		
 		new BukkitRunnable(){
 
@@ -66,7 +68,7 @@ public class WorldFactory implements ConfigurationSerializable {
 				int fuel = recipe.getFuel();
 				int fuelOff = fuel;
 				MechaFactoryRecipe rec = recipe;
-				while (rec!=null && valid && validFurnaces(fac, recipe, chest, fuelOff-fuel) && fuel>0){
+				while (rec!=null && valid(chest) && validFurnaces(fac, recipe, chest, fuelOff-fuel) && fuel>0){
 					int time = fac.getTimePerFuel();
 					for (Furnace f : furnaces){
 						f.setBurnTime((short) time);
@@ -79,10 +81,9 @@ public class WorldFactory implements ConfigurationSerializable {
 						break;
 					}
 					rec = fac.getRecipeFromInput(chest.getBlockInventory());
-					validate(chest);
 					fuel--;
 				}
-				if (fuel==0 && rec!=null && valid){
+				if (fuel==0 && rec!=null && valid(chest)){
 					fac.setInventoryToOutput(chest.getBlockInventory(), rec);
 					world.playSound(chest.getLocation(),Sound.LEVEL_UP, 1, 1);
 				}
@@ -96,17 +97,16 @@ public class WorldFactory implements ConfigurationSerializable {
 	
 	public List<Furnace> getFurnaces(MechaFactory fac, Chest chest){
 		List<Furnace> furnaces = new ArrayList<Furnace>();
-		for (Position3 pos : fac.getFurnaceLocations()){
-			Position3 fur = pos.times(fac.getRelativityFrom(chest)).plus(origin);
-			Furnace f = (Furnace) world.getBlockAt((int) fur.getX(), (int) fur.getY(), (int) fur.getZ());
+		for (Position3 fur : fac.getFurnaceLocations(getRelativityFrom(chest))){
+			fur = fur.plus(origin);
+			Furnace f = (Furnace) world.getBlockAt((int) fur.getX(),(int) fur.getY(),(int) fur.getZ());
 			furnaces.add(f);
 		}
 		return furnaces;
 	}
 	
 	public boolean validFurnaces(MechaFactory fac, MechaFactoryRecipe recipe, Chest chest, int fuelOffset){
-		for (Position3 pos : fac.getFurnaceLocations()){
-			Position3 fur = pos.times(fac.getRelativityFrom(chest)).plus(origin);
+		for (Furnace fur : getFurnaces(fac,chest)){
 			Furnace f = (Furnace) world.getBlockAt((int) fur.getX(), (int) fur.getY(), (int) fur.getZ());
 			ItemStack fuel = f.getInventory().getFuel(); ItemStack fIn = f.getInventory().getSmelting();
 			if (!((fIn==null || fIn.getType()==Material.AIR) && (fuel!=null && 
@@ -119,13 +119,17 @@ public class WorldFactory implements ConfigurationSerializable {
 		return validFurnaces(fac, recipe, chest, 0);
 	}
 	
-	public void validate(Chest chest){
-		valid = Mechanization.factories.containsKey(factoryName) && 
-				Mechanization.factories.get(factoryName).validAtChestLocation(chest.getLocation());
+	public Location getOriginLocation(){
+		return new Location(world,origin.getX(),origin.getY(),origin.getZ());
 	}
 	
-	public boolean isValidated(){
-		return valid;
+	public boolean valid(Chest chest){
+		MechaFactory fac = getFactory();
+		return fac!=null && fac.validForLocation(getOriginLocation(), getRelativityFrom(chest));
+	}
+	
+	public MechaFactory getFactory(){
+		return Mechanization.factories.get(factoryName);
 	}
 	
 	public boolean isRunning(){
@@ -139,6 +143,27 @@ public class WorldFactory implements ConfigurationSerializable {
 		data.put("POSITION", origin);
 		data.put("WORLD", world.getName());
 		return data;
+	}
+	
+	public Position3 getRelativityFrom(Chest chest){
+		Position3 rel = new Position3(0,1,0);
+		switch(((org.bukkit.material.Chest) chest.getBlock()).getFacing()){
+		case NORTH:
+			rel.setX(-1);
+			break;
+		case SOUTH:
+			rel.setX(1);
+			break;
+		case WEST:
+			rel.setZ(-1);
+			break;
+		case EAST:
+			rel.setZ(1);
+			break;
+		default:
+			break;
+		}
+		return rel;
 	}
 
 }

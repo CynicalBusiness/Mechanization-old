@@ -1,7 +1,5 @@
 package me.capit.mechanization;
 
-import org.json.simple.JSONObject;
-
 public interface Mechanized {
 	
 	/**
@@ -15,11 +13,5 @@ public interface Mechanized {
 	 * @return The display name.
 	 */
 	public abstract String getDisplayName();
-	
-	/**
-	 * Gets the JSONObject attatched to this object.
-	 * @return The JSON object.
-	 */
-	public abstract JSONObject getJSON();
 	
 }

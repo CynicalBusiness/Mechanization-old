@@ -1,9 +1,11 @@
 package me.capit.mechanization;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
+import me.capit.mechanization.exception.MechaException;
 import me.capit.mechanization.factory.MechaFactory;
 import me.capit.mechanization.factory.WorldFactory;
 import me.capit.mechanization.item.MechaItem;
@@ -13,19 +15,25 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 
 public class Mechanization extends JavaPlugin {
 	public static HashMap<String, MechaItem> items = new HashMap<String, MechaItem>();
 	public static HashMap<String, MechaFactoryRecipe> recipes = new HashMap<String, MechaFactoryRecipe>();
 	public static HashMap<String, MechaFactory> factories = new HashMap<String, MechaFactory>();
 	public static Logger logger; public static ConsoleCommandSender console;
-	public static File pluginDir; public static File itemDir;
-	public static File recipeDir; public static File factoryDir;
+	public static File pluginDir;
+	
+	public static Document factoriesDoc,itemsDoc,recipesDoc;
 	
 	public static Mechanization plugin;
 	
 	static {
 		ConfigurationSerialization.registerClass(WorldFactory.class);
+		ConfigurationSerialization.registerClass(Position3.class);
 	}
 	
 	@Override
@@ -38,46 +46,60 @@ public class Mechanization extends JavaPlugin {
 		
 		console.sendMessage(ChatColor.WHITE+"Initializing directories and loading defaults...");
 		pluginDir = getDataFolder();
-		saveResource("items", false);
-		saveResource("recipes", false);
-		saveResource("factories", false);
+		saveResource("items.xml", false);
+		saveResource("recipes.xml", false);
+		saveResource("factories.xml", false);
 		
-		itemDir = new File(pluginDir.getPath()+File.separator+"/items");
-		recipeDir = new File(pluginDir.getPath()+File.separator+"/recipes");
-		factoryDir = new File(pluginDir.getPath()+File.separator+"/factories");
-		
-		console.sendMessage(ChatColor.WHITE+"Loading items...");
-		for (File f : itemDir.listFiles()){
-			if (f.isFile()){
-				MechaItem mi = new MechaItem(f);
-				items.put(mi.getName(), mi);
-				console.sendMessage(ChatColor.WHITE+"  Loaded "+ChatColor.translateAlternateColorCodes('&', "&o"+mi.getDisplayName()));
-			}
-		}
-		
-		console.sendMessage(ChatColor.WHITE+"Loading recipes...");
-		for (File f : recipeDir.listFiles()){
-			if (f.isFile()){
-				MechaFactoryRecipe mi = new MechaFactoryRecipe(f);
-				recipes.put(mi.getName(), mi);
-				console.sendMessage(ChatColor.WHITE+"  Loaded "+ChatColor.translateAlternateColorCodes('&', mi.getDisplayName()));
-			}
-		}
-		
-		console.sendMessage(ChatColor.WHITE+"Loading factories...");
-		for (File f : factoryDir.listFiles()){
-			if (f.isFile()){
-				MechaFactory mi = new MechaFactory(f);
-				if (mi.formatMatchesDims()){
-					factories.put(mi.getName(), mi);
-					console.sendMessage(ChatColor.WHITE+"  Loaded "+ChatColor.translateAlternateColorCodes('&', mi.getDisplayName()));
-				} else {
-					console.sendMessage(ChatColor.WHITE+"  Skipped "+ChatColor.translateAlternateColorCodes('&', mi.getDisplayName())+" as format &cfailed&f.");
+		SAXBuilder builder = new SAXBuilder();
+		try {
+			itemsDoc = builder.build(new File(getDataFolder(), "items.xml"));
+			console.sendMessage(ChatColor.WHITE+"Loading items...");
+			for (Element element : itemsDoc.getRootElement().getChildren()){
+				try {
+					MechaItem mi = new MechaItem(element);
+					items.put(mi.getName(), mi);
+					console.sendMessage(ChatColor.WHITE+"  Loaded "+mi.getDisplayName());
+				} catch (MechaException e){
+					e.printStackTrace();
 				}
 			}
+		} catch (IOException | JDOMException e){
+			console.sendMessage(ChatColor.RED+"FAILED to load items!");
+			e.printStackTrace();
 		}
 		
+		try {
+			recipesDoc = builder.build(new File(getDataFolder(), "recipes.xml"));
+			console.sendMessage(ChatColor.WHITE+"Loading recipes...");
+			for (Element element : recipesDoc.getRootElement().getChildren()){
+				try {
+					MechaFactoryRecipe mi = new MechaFactoryRecipe(element);
+					recipes.put(mi.getName(), mi);
+					console.sendMessage(ChatColor.WHITE+"  Loaded "+mi.getDisplayName());
+				} catch (MechaException e){
+					e.printStackTrace();
+				}
+			}
+		} catch (IOException | JDOMException e){
+			console.sendMessage(ChatColor.RED+"FAILED to load recipes!");
+			e.printStackTrace();
+		}
 		
+		try {
+			factoriesDoc = builder.build(new File(getDataFolder(), "factories.xml"));
+			console.sendMessage(ChatColor.WHITE+"Loading factories...");
+			for (Element element : factoriesDoc.getRootElement().getChildren()){
+				try {
+					MechaFactory mi = new MechaFactory(element);
+					console.sendMessage(ChatColor.WHITE+"  Loaded "+ChatColor.translateAlternateColorCodes('&', mi.getDisplayName()));
+				} catch (MechaException e){
+					e.printStackTrace();
+				}
+			}
+		} catch (IOException | JDOMException e){
+			console.sendMessage(ChatColor.RED+"FAILED to load factories!");
+			e.printStackTrace();
+		}
 	}
 	
 	@Override

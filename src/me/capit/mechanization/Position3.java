@@ -6,10 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
 
 public class Position3 implements ConfigurationSerializable, Serializable {
-	{ConfigurationSerialization.registerClass(Position3.class);}
 	private static final long serialVersionUID = -2583242753363303725L;
 	
 	private double x,y,z;

@@ -1,38 +1,38 @@
 package me.capit.mechanization.recipe;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.Serializable;
 
-import org.bukkit.Material;
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.jdom2.Element;
 
-import me.capit.mechanization.Mechanization;
 import me.capit.mechanization.Mechanized;
+import me.capit.mechanization.exception.MechaException;
 
 public class MechaFactoryRecipe implements Mechanized, Serializable {
 	private static final long serialVersionUID = 7377065024361610946L;
-	private final String name;
-	private JSONParser p = new JSONParser();
-	private JSONObject json;
-
-	private FactoryRecipeMatrix input; private FactoryRecipeMatrix output;
+	private final String name,displayName,description;
+	private int fuel;
+	private RecipeMatrix input,output;
+	private Element keys;
 	
-	public MechaFactoryRecipe(File file){
-		name = file.getName().replaceFirst("[.][^.]+$", "");
+	public MechaFactoryRecipe(Element element) throws MechaException {
+		if (!element.getName().equals("factory")) throw new MechaException().new InvalidElementException("factory", element.getName());
+		if (element.getAttribute("name")==null) throw new MechaException().new MechaNameNullException();
+		name = element.getAttributeValue("name");
 		try {
-			FileReader reader = new FileReader(file);
-			json = (JSONObject) p.parse(reader);
-			input = new FactoryRecipeMatrix((JSONArray) json.get("input"));
-			output = new FactoryRecipeMatrix((JSONArray) json.get("output"));
-		} catch (IOException | ParseException | NullPointerException e) {
-			e.printStackTrace();
+			Element meta = element.getChild("meta");
+			if (meta.getAttribute("display")!=null) displayName = meta.getAttributeValue("display"); else throw null;
+			if (meta.getAttribute("description")!=null) description = meta.getAttributeValue("description"); else throw null;
+			if (meta.getAttribute("fuel")!=null) fuel = Integer.parseInt(meta.getAttributeValue("fuel")); else throw null;
+			
+			if (element.getChild("keys")!=null) keys = element.getChild("keys"); else throw null;
+			
+			input = new RecipeMatrix(element.getAttributeValue("matrix"));
+			output = new RecipeMatrix(element.getAttributeValue("matrix"));
+		} catch (NullPointerException | IllegalArgumentException e){
+			throw new MechaException().new MechaAttributeInvalidException("Null or invalid tag/attribute value for "+name+"!");
 		}
 	}
 	
@@ -43,41 +43,44 @@ public class MechaFactoryRecipe implements Mechanized, Serializable {
 
 	@Override
 	public String getDisplayName() {
-		return (String) json.get("display_name");
-	}
-
-	@Override
-	public JSONObject getJSON() {
-		return json;
+		return ChatColor.translateAlternateColorCodes('&', displayName);
 	}
 	
-	public ItemStack getItemStackByKey(char key){
-		if (key==' ') return new ItemStack(Material.AIR);
-		JSONObject keys = (JSONObject) json.get("keys");
-		if (keys.get(String.valueOf(key))!=null){
-			JSONArray data = (JSONArray) keys.get(String.valueOf(key));
-			for (Object o : data){
-				String s = (String) o;
-				String[] isdata = s.split(":");
-				if (isdata[0].startsWith("!")){
-					if (Mechanization.items.containsKey(isdata[0].substring(1))){
-						return Mechanization.items.get(isdata[0].substring(1)).getItemStack(Integer.parseInt(isdata[2]));
-					} else {
-						Mechanization.logger.warning("Attempted to compare bad custom item '"+isdata[0].substring(1)+"'!");
-					}
-				} else {
-					ItemStack is = new ItemStack(Material.valueOf(isdata[0]), Integer.parseInt(isdata[2]));
-					is.setDurability(Short.parseShort(isdata[1]));
-					return is;
-				}
+	public String getDescription() {
+		return ChatColor.translateAlternateColorCodes('&', description);
+	}
+	
+	public Element getKeys(){
+		return keys;
+	}
+	
+	public ItemStack getItemStackByKey(RecipeMatrixKey key) throws IllegalArgumentException {
+		return key.getItemStack();
+	}
+	
+	public RecipeMatrixKey getKeyByKeyChar(char keyChar){
+		for (Element ke : getKeys().getChildren()){
+			try {
+				RecipeMatrixKey key = new RecipeMatrixKey(ke);
+				if (key.getKeyChar()==keyChar) return key;
+			} catch (MechaException e){
+				// Do nothing.
 			}
 		}
-		return null;
+		return new RecipeMatrixKey();
 	}
 	
-	public boolean inputMatches(Inventory inv){
-		for (int i=0; i<27; i++){
-			if (!FactoryRecipeMatrix.itemStackMatches(getItemStackByKey(input.getKeyAtSlot(i)), inv.getItem(i))) return false;
+	public RecipeMatrixKey getKeyAtInputSlot(int slot){
+		return getKeyByKeyChar(input.getCharAtSlot(slot));
+	}
+	
+	public RecipeMatrixKey getKeyAtOutputSlot(int slot){
+		return getKeyByKeyChar(output.getCharAtSlot(slot));
+	}
+	
+	public boolean inventoryMatchesInput(Inventory inv){
+		for (int i = 0; i<27; i++){
+			if (!getKeyAtInputSlot(i).matchesStack(inv.getItem(i))) return false;
 		}
 		return true;
 	}
@@ -85,20 +88,20 @@ public class MechaFactoryRecipe implements Mechanized, Serializable {
 	public void setInventoryToOutput(Inventory inv){
 		inv.clear();
 		for (int i=0; i<27; i++){
-			inv.setItem(i,getItemStackByKey(output.getKeyAtSlot(i)));
+			inv.setItem(i,getItemStackByKey(getKeyAtOutputSlot(i)));
 		}
 	}
 	
-	public FactoryRecipeMatrix getInput(){
+	public RecipeMatrix getInput(){
 		return input;
 	}
 	
-	public FactoryRecipeMatrix getOutput(){
+	public RecipeMatrix getOutput(){
 		return output;
 	}
 	
 	public int getFuel(){
-		return (int) json.get("fuel");
+		return fuel;
 	}
 
 }
