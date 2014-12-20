@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
+import me.capit.mechanization.exception.MechaException;
 import me.capit.mechanization.factory.MechaFactory;
 import me.capit.mechanization.item.MechaItem;
 import me.capit.mechanization.recipe.MechaFactoryRecipe;
