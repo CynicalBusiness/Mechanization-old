@@ -44,9 +44,9 @@ public class MechaFactory implements Mechanized, Serializable {
 			if (data.getAttribute("fuel_time")!=null) fuelTime = Integer.parseInt(data.getAttributeValue("fuel_time")); else throw null;
 			if (data.getAttribute("activator")==null) throw null;
 				else if (data.getAttributeValue("activator").startsWith("!")) {
-					activator = Mechanization.items.get(meta.getAttributeValue("activator").substring(1)).getItemStack();
+					activator = Mechanization.items.get(data.getAttributeValue("activator").substring(1)).getItemStack();
 				} else {
-					activator = new ItemStack(Material.valueOf(meta.getAttributeValue("activator")),1);
+					activator = new ItemStack(Material.valueOf(data.getAttributeValue("activator")),1);
 				}
 			damage = data.getAttribute("damage")!=null ? Integer.parseInt(data.getAttributeValue("damage")) : 0;
 			consume = data.getAttribute("consume")!=null ? Integer.parseInt(data.getAttributeValue("consume")) : 0;
@@ -58,6 +58,7 @@ public class MechaFactory implements Mechanized, Serializable {
 			
 			matrix = new FactoryMatrix(element.getChild("matrix"));
 		} catch (NullPointerException | IllegalArgumentException e){
+			e.printStackTrace();
 			throw new MechaException().new MechaAttributeInvalidException("Null or invalid tag/attribute value for item "+name+"!");
 		}
 	}

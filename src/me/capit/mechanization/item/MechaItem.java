@@ -28,10 +28,11 @@ public class MechaItem implements Mechanized, Serializable {
 			if (meta.getAttribute("lore")!=null) lore = meta.getAttributeValue("lore"); else throw null;
 			
 			Element data = element.getChild("data");
-			if (data.getAttribute("material")!=null) baseMaterial = Material.valueOf(meta.getAttributeValue("material")); else throw null;
+			if (data.getAttribute("material")!=null) baseMaterial = Material.valueOf(data.getAttributeValue("material")); else throw null;
 			baseData = data.getAttribute("data") !=null ? Integer.parseInt(data.getAttributeValue("data")) : 0;
 		} catch (NullPointerException | IllegalArgumentException e){
-			throw new MechaException().new MechaAttributeInvalidException("Null or invalid tag/attribute value for item "+name+"!");
+			e.printStackTrace();
+			throw new MechaException().new MechaAttributeInvalidException("Null or invalid tag/attribute value for "+name+". ");
 		}
 	}
 	

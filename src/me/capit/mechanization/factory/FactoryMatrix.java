@@ -28,12 +28,12 @@ public class FactoryMatrix {
 		
 		try {
 			matrix = new Element[(int) dims.getY()][(int) dims.getZ()][(int) dims.getX()];
-			Element chest = matrix[(int) chestLoc.getY()][(int) chestLoc.getZ()][(int) chestLoc.getX()];
-			if (!chest.getAttributeValue("material").equals("CHEST")) throw null;
-			
 			for (int j = 0; j<dims.getY(); j++) for (int k = 0; k<dims.getZ(); k++) for (int l = 0; l<dims.getX(); l++) 
 				matrix[j][k][l] = element.getChildren().get(j).getChildren().get(k).getChildren().get(l);
 			
+			Element chest = matrix[(int) chestLoc.getY()][(int) chestLoc.getZ()][(int) chestLoc.getX()];
+			if (!chest.getAttributeValue("material").equals("CHEST")) throw null;
+
 			if (glitchInMatrix()) throw new ArrayIndexOutOfBoundsException();
 		} catch (ArrayIndexOutOfBoundsException e){
 			throw new MechaException("Format did not match dims.");

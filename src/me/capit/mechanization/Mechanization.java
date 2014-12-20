@@ -5,24 +5,21 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
-import me.capit.mechanization.exception.MechaException;
 import me.capit.mechanization.factory.MechaFactory;
 import me.capit.mechanization.item.MechaItem;
 import me.capit.mechanization.recipe.MechaFactoryRecipe;
+import me.capit.xmpapi.XMLPlugin;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.input.SAXBuilder;
 
 public class Mechanization extends JavaPlugin {
-	public static HashMap<String, MechaItem> items = new HashMap<String, MechaItem>();
-	public static HashMap<String, MechaFactoryRecipe> recipes = new HashMap<String, MechaFactoryRecipe>();
-	public static HashMap<String, MechaFactory> factories = new HashMap<String, MechaFactory>();
+	public static final HashMap<String, MechaItem> items = new HashMap<String, MechaItem>();
+	public static final HashMap<String, MechaFactoryRecipe> recipes = new HashMap<String, MechaFactoryRecipe>();
+	public static final HashMap<String, MechaFactory> factories = new HashMap<String, MechaFactory>();
 	public static Logger logger; public static ConsoleCommandSender console;
 	public static File pluginDir;
 	
@@ -44,15 +41,14 @@ public class Mechanization extends JavaPlugin {
 		
 		console.sendMessage(ChatColor.WHITE+"Initializing directories and loading defaults...");
 		pluginDir = getDataFolder();
-		saveResource("items.xml", false);
-		saveResource("recipes.xml", false);
-		saveResource("factories.xml", false);
+		saveDefaultResource("items.xml");
+		saveDefaultResource("recipes.xml");
+		saveDefaultResource("factories.xml");
 		
-		SAXBuilder builder = new SAXBuilder();
 		try {
-			itemsDoc = builder.build(new File(getDataFolder(), "items.xml"));
+			itemsDoc = XMLPlugin.read(new File(getDataFolder(), "items.xml"));
 			console.sendMessage(ChatColor.WHITE+"Loading items...");
-			for (Element element : itemsDoc.getRootElement().getChildren()){
+			for (org.jdom2.Element element : itemsDoc.getRootElement().getChildren()){
 				try {
 					MechaItem mi = new MechaItem(element);
 					items.put(mi.getName(), mi);
@@ -61,15 +57,15 @@ public class Mechanization extends JavaPlugin {
 					e.printStackTrace();
 				}
 			}
-		} catch (IOException | JDOMException e){
+		} catch (IOException | org.jdom2.JDOMException e){
 			console.sendMessage(ChatColor.RED+"FAILED to load items!");
 			e.printStackTrace();
 		}
 		
 		try {
-			recipesDoc = builder.build(new File(getDataFolder(), "recipes.xml"));
+			recipesDoc = XMLPlugin.read(new File(getDataFolder(), "recipes.xml"));
 			console.sendMessage(ChatColor.WHITE+"Loading recipes...");
-			for (Element element : recipesDoc.getRootElement().getChildren()){
+			for (org.jdom2.Element element : recipesDoc.getRootElement().getChildren()){
 				try {
 					MechaFactoryRecipe mi = new MechaFactoryRecipe(element);
 					recipes.put(mi.getName(), mi);
@@ -78,15 +74,15 @@ public class Mechanization extends JavaPlugin {
 					e.printStackTrace();
 				}
 			}
-		} catch (IOException | JDOMException e){
+		} catch (IOException | org.jdom2.JDOMException e){
 			console.sendMessage(ChatColor.RED+"FAILED to load recipes!");
 			e.printStackTrace();
 		}
 		
 		try {
-			factoriesDoc = builder.build(new File(getDataFolder(), "factories.xml"));
+			factoriesDoc = XMLPlugin.read(new File(getDataFolder(), "factories.xml"));
 			console.sendMessage(ChatColor.WHITE+"Loading factories...");
-			for (Element element : factoriesDoc.getRootElement().getChildren()){
+			for (org.jdom2.Element element : factoriesDoc.getRootElement().getChildren()){
 				try {
 					MechaFactory mi = new MechaFactory(element);
 					console.sendMessage(ChatColor.WHITE+"  Loaded "+ChatColor.translateAlternateColorCodes('&', mi.getDisplayName()));
@@ -94,15 +90,14 @@ public class Mechanization extends JavaPlugin {
 					e.printStackTrace();
 				}
 			}
-		} catch (IOException | JDOMException e){
+		} catch (IOException | org.jdom2.JDOMException e){
 			console.sendMessage(ChatColor.RED+"FAILED to load factories!");
 			e.printStackTrace();
 		}
 	}
 	
-	@Override
-	public void onDisable(){
-		
+	public void saveDefaultResource(String resource){
+		if (!new File(getDataFolder(), resource).exists()) saveResource(resource,false);
 	}
 	
 }

@@ -18,20 +18,21 @@ public class MechaFactoryRecipe implements Mechanized, Serializable {
 	private Element keys;
 	
 	public MechaFactoryRecipe(Element element) throws MechaException {
-		if (!element.getName().equals("factory")) throw new MechaException().new InvalidElementException("factory", element.getName());
+		if (!element.getName().equals("recipe")) throw new MechaException().new InvalidElementException("recipe", element.getName());
 		if (element.getAttribute("name")==null) throw new MechaException().new MechaNameNullException();
 		name = element.getAttributeValue("name");
 		try {
 			Element meta = element.getChild("meta");
 			if (meta.getAttribute("display")!=null) displayName = meta.getAttributeValue("display"); else throw null;
 			if (meta.getAttribute("description")!=null) description = meta.getAttributeValue("description"); else throw null;
-			if (meta.getAttribute("fuel")!=null) fuel = Integer.parseInt(meta.getAttributeValue("fuel")); else throw null;
+			if (meta.getAttribute("fuel_cost")!=null) fuel = Integer.parseInt(meta.getAttributeValue("fuel_cost")); else throw null;
 			
 			if (element.getChild("keys")!=null) keys = element.getChild("keys"); else throw null;
 			
-			input = new RecipeMatrix(element.getAttributeValue("matrix"));
-			output = new RecipeMatrix(element.getAttributeValue("matrix"));
+			input = new RecipeMatrix(element.getChild("input").getAttributeValue("matrix"));
+			output = new RecipeMatrix(element.getChild("output").getAttributeValue("matrix"));
 		} catch (NullPointerException | IllegalArgumentException e){
+			e.printStackTrace();
 			throw new MechaException().new MechaAttributeInvalidException("Null or invalid tag/attribute value for "+name+"!");
 		}
 	}

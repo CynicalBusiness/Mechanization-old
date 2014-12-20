@@ -2,6 +2,7 @@ package me.capit.mechanization;
 
 import me.capit.mechanization.factory.WorldFactory;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -23,6 +24,7 @@ public class MechaDataController implements Listener, CommandExecutor {
 	public void activateFactory(PlayerInteractEvent e){
 		Block b = e.getClickedBlock();
 		if (b instanceof Chest){
+			Bukkit.getServer().getLogger().info("Player clicked chest!");
 			Chest chest = (Chest) b;
 			WorldFactory wf = WorldFactory.getFactoryAtChest(e.getItem(), chest);
 			if (wf!=null && wf.valid()){

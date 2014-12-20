@@ -46,8 +46,8 @@ public class RecipeMatrix {
 	
 	public RecipeMatrix(String matrix) throws NullPointerException,MechaException {
 		if (matrix==null) throw null;
-		if (!matrixValid(getMatrixAsArray())) throw new MechaException().new MechaAttributeInvalidException("Input string not a valid matrix.");
 		this.matrix=matrix;
+		if (!matrixValid(getMatrixAsArray())) throw new MechaException().new MechaAttributeInvalidException("Input string not a valid matrix.");
 	}
 	
 	public int getMatrixSlotLength(){
