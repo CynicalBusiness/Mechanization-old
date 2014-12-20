@@ -3,35 +3,32 @@ package me.capit.mechanization.recipe;
 import me.capit.mechanization.exception.MechaException;
 
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class RecipeMatrix {
 	public static final int matrixHeight = 3;
 	public static final int matrixWidth = 9;
 	
-	public static boolean itemStackMatchesIgnoreMeta(ItemStack one, ItemStack two){
-		return one.getAmount()==two.getAmount() && one.getType()==two.getType() && 
-				one.getDurability() == one.getDurability();
+	public static boolean quantityMatches(ItemStack one, ItemStack two){
+		return one.getAmount()==two.getAmount();
 	}
 	
-	public static boolean itemStackMatchesIgnoreQuantityAndDurability(ItemStack one, ItemStack two){
-		return one.getType()==two.getType() && 
-				one.getItemMeta().getDisplayName().equals(two.getItemMeta().getDisplayName());
+	public static boolean durabilityMatches(ItemStack one, ItemStack two){
+		return one.getDurability()==two.getDurability();
 	}
 	
-	public static boolean itemStackMatchesIgnoreDurability(ItemStack one, ItemStack two){
-		return one.getAmount()==two.getAmount() && one.getType()==two.getType() && 
-				one.getItemMeta().getDisplayName().equals(two.getItemMeta().getDisplayName());
+	public static boolean materialMatches(ItemStack one, ItemStack two){
+		return one.getType()==two.getType();
 	}
 	
-	public static boolean itemStackMatchesIgnoreQuantity(ItemStack one, ItemStack two){
-		return one.getType()==two.getType() && one.getItemMeta().getDisplayName().equals(two.getItemMeta().getDisplayName()) && 
-				one.getDurability() == one.getDurability();
-	}
-	
-	public static boolean itemStackMatches(ItemStack one, ItemStack two){
-		return one.getAmount()==two.getAmount() && one.getType()==two.getType() && 
-				one.getItemMeta().getDisplayName().equals(two.getItemMeta().getDisplayName()) && 
-				one.getDurability() == one.getDurability();
+	public static boolean metaMatches(ItemStack one, ItemStack two){
+		ItemMeta oneMeta = one.getItemMeta();
+		ItemMeta twoMeta = two.getItemMeta();
+		if ((oneMeta.hasDisplayName() && !twoMeta.hasDisplayName()) || (!oneMeta.hasDisplayName() && twoMeta.hasDisplayName())) return false;
+		if ((oneMeta.hasLore() && !twoMeta.hasLore()) || (!oneMeta.hasLore() && twoMeta.hasLore())) return false;
+		if (oneMeta.hasDisplayName() && twoMeta.hasDisplayName() && !oneMeta.getDisplayName().equals(twoMeta.getDisplayName())) return false;
+		if (oneMeta.hasLore() && twoMeta.hasLore() && !oneMeta.getLore().equals(twoMeta.getLore())) return false;
+		return true;
 	}
 	
 	public static boolean matrixValid(String[] matrix){
@@ -62,9 +59,9 @@ public class RecipeMatrix {
 	
 	public char getCharAtSlot(int slot) throws IndexOutOfBoundsException {
 		if (slot>getMatrixSlotLength()) throw new IndexOutOfBoundsException();
-		int row = 0, col = 0;
-		while (col>=matrixWidth){row++; col-=matrixWidth;}
-		return getCharAtPos(row, col);
+		int row = 0;
+		while (slot>=matrixWidth){row++; slot-=matrixWidth;}
+		return getCharAtPos(row, slot);
 	}
 	
 	public String[] getMatrixAsArray(){

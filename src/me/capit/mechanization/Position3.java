@@ -70,13 +70,13 @@ public class Position3 implements ConfigurationSerializable, Serializable {
 		return new Position3(x+pos.getX(), y+pos.getY(), z+pos.getZ());
 	}
 	public Position3 minus(Position3 pos){
-		return plus(inverse());
+		return plus(pos.inverse());
 	}
 	public Position3 times(Position3 pos){
 		return new Position3(x*pos.getX(), y*pos.getY(), z*pos.getZ());
 	}
 	public Position3 divide(Position3 pos){
-		return times(reciprocal());
+		return times(pos.reciprocal());
 	}
 
 }

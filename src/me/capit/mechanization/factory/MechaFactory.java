@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -26,7 +27,7 @@ public class MechaFactory implements Mechanized, Serializable {
 	private final ItemStack activator;
 	private final int fuelTime,consume,damage;
 	private final boolean captureEvents;
-	private final List<MechaFactoryRecipe> recipes;
+	private final List<MechaFactoryRecipe> recipes = new ArrayList<MechaFactoryRecipe>();
 	private final FactoryMatrix matrix;
 	
 	public MechaFactory(Element element) throws MechaException {
@@ -53,8 +54,13 @@ public class MechaFactory implements Mechanized, Serializable {
 			captureEvents = data.getAttribute("capture_events")!=null ? Boolean.parseBoolean(data.getAttributeValue("capture_events")) : true;
 			
 			Element recs = element.getChild("recipes");
-			recipes = new ArrayList<MechaFactoryRecipe>();
-			for (String rec : recs.getValue().split(",")) recipes.add(Mechanization.recipes.get(rec));
+			for (String rec : recs.getValue().trim().split(",")){
+				if (!Mechanization.recipes.containsKey(rec)){
+					Bukkit.getServer().getLogger().info("Failed to find recipe "+rec);
+					continue;
+				}
+				recipes.add(Mechanization.recipes.get(rec));
+			}
 			
 			matrix = new FactoryMatrix(element.getChild("matrix"));
 		} catch (NullPointerException | IllegalArgumentException e){
@@ -97,32 +103,35 @@ public class MechaFactory implements Mechanized, Serializable {
 		return captureEvents;
 	}
 	
-	public boolean validActivator(ItemStack is){
-		return RecipeMatrix.itemStackMatchesIgnoreQuantity(is, activator);
+	public boolean validActivator(ItemStack activator){
+		if ((activator==null && getActivator()!=null) || (activator!=null && getActivator()==null)) return false;
+		return RecipeMatrix.materialMatches(activator, getActivator())
+				&& RecipeMatrix.metaMatches(activator, getActivator())
+				&& (getActivatorDamage()==0 || RecipeMatrix.durabilityMatches(activator, getActivator()));
 	}
 	
-	public boolean applyActivatorEffects(ItemStack is){
-		if (is.getAmount()==consume){
-			is.setType(Material.AIR);
+	public boolean applyActivatorEffects(ItemStack activator){
+		if ((activator==null && getActivator()!=null) || (activator!=null && getActivator()==null)) return false;
+		if (activator==null && getActivator()==null) return true;
+		if (activator.getAmount()==consume){
+			activator.setType(Material.AIR);
 			return true;
-		} else if (is.getAmount()>consume) {
-			is.setAmount(is.getAmount()-consume);
-			is.setDurability((short) (is.getDurability() - damage));
+		} else if (activator.getAmount()>consume) {
+			activator.setAmount(activator.getAmount()-consume);
+			activator.setDurability((short) (activator.getDurability() - damage));
 			return true;
 		}
 		return false;
 	}
 	
 	@SuppressWarnings("deprecation")
-	public boolean blockMatchesAtLocation(Block block, Position3 pos){
-		ItemStack is = matrix.getItemStackAtPosition(pos);
-		if (is==null) return true;
-		if (is.getType()!=block.getType()) return false;
-		if (matrix.elementAtPositionRequriesData(pos) && block.getData()!=(byte) is.getDurability()) return false;
+	public boolean blockMatchesAtLocation(Block b, Position3 pos){
+		if (matrix.getItemStackAtPosition(pos)==null) return true;
+		if (matrix.getMaterialAtPosition(pos)!=null && b.getType()!=matrix.getMaterialAtPosition(pos)) return false;
+		if (matrix.getDurabilityAtPosition(pos)>-1 && b.getData()!=matrix.getDurabilityAtPosition(pos)) return false;
 		return true;
 	}
 	
-	@SuppressWarnings("deprecation")
 	public boolean validForLocation(Location origin, Position3 relativity){
 		for (int x=0; x<matrix.getDims().getX(); x++){
 			for (int y=0; y<matrix.getDims().getY(); y++){
@@ -133,8 +142,7 @@ public class MechaFactory implements Mechanized, Serializable {
 							origin.getBlockX()+(int) relpos.getX(), 
 							origin.getBlockY()+(int) relpos.getY(), 
 							origin.getBlockZ()+(int) relpos.getZ());
-					if (matrix.getMaterialAtPosition(pos)!=null && b.getType()!=matrix.getMaterialAtPosition(pos)) return false;
-					if (matrix.getDurabilityAtPosition(pos)>-1 && b.getData()!=matrix.getDurabilityAtPosition(pos)) return false;
+					if (!blockMatchesAtLocation(b,pos)) return false;
 				}
 			}
 		}
@@ -152,8 +160,8 @@ public class MechaFactory implements Mechanized, Serializable {
 		return null;
 	}
 	
-	public List<Position3> getFurnaceLocations(Position3 relativity){
-		return matrix.getLocationsOfMaterial(Material.FURNACE, 0, relativity);
+	public List<Position3> getFurnaceLocations(){
+		return matrix.getLocationsOfMaterial(Material.FURNACE, 0);
 	}
 	
 	public int getActivatorDamage(){

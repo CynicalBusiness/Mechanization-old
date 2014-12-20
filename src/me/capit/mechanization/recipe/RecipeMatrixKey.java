@@ -57,6 +57,8 @@ public class RecipeMatrixKey {
 		return amount;
 	}
 	public boolean matchesStack(ItemStack is){
+		if ((material==null || material==Material.AIR) && is==null) return true;
+		if (is==null) return false;
 		if (material!=null && is.getType()!=material) return false;
 		if (data>-1 && is.getDurability()!=data) return false;
 		if (material!=Material.AIR && amount>-1 && amount!=is.getAmount()) return false;

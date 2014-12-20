@@ -9,13 +9,15 @@ import me.capit.mechanization.exception.MechaException;
 import me.capit.mechanization.factory.MechaFactory;
 import me.capit.mechanization.item.MechaItem;
 import me.capit.mechanization.recipe.MechaFactoryRecipe;
-import me.capit.xmpapi.XMLPlugin;
+import me.capit.xmlapi.XMLPlugin;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
 
 public class Mechanization extends JavaPlugin {
 	public static final HashMap<String, MechaItem> items = new HashMap<String, MechaItem>();
@@ -46,10 +48,12 @@ public class Mechanization extends JavaPlugin {
 		saveDefaultResource("recipes.xml");
 		saveDefaultResource("factories.xml");
 		
+		this.getServer().getPluginManager().registerEvents(new MechaDataController(this), this);
+		
 		try {
 			itemsDoc = XMLPlugin.read(new File(getDataFolder(), "items.xml"));
 			console.sendMessage(ChatColor.WHITE+"Loading items...");
-			for (org.jdom2.Element element : itemsDoc.getRootElement().getChildren()){
+			for (Element element : itemsDoc.getRootElement().getChildren()){
 				try {
 					MechaItem mi = new MechaItem(element);
 					items.put(mi.getName(), mi);
@@ -58,7 +62,7 @@ public class Mechanization extends JavaPlugin {
 					e.printStackTrace();
 				}
 			}
-		} catch (IOException | org.jdom2.JDOMException e){
+		} catch (IOException | JDOMException e){
 			console.sendMessage(ChatColor.RED+"FAILED to load items!");
 			e.printStackTrace();
 		}
@@ -66,7 +70,7 @@ public class Mechanization extends JavaPlugin {
 		try {
 			recipesDoc = XMLPlugin.read(new File(getDataFolder(), "recipes.xml"));
 			console.sendMessage(ChatColor.WHITE+"Loading recipes...");
-			for (org.jdom2.Element element : recipesDoc.getRootElement().getChildren()){
+			for (Element element : recipesDoc.getRootElement().getChildren()){
 				try {
 					MechaFactoryRecipe mi = new MechaFactoryRecipe(element);
 					recipes.put(mi.getName(), mi);
@@ -75,7 +79,7 @@ public class Mechanization extends JavaPlugin {
 					e.printStackTrace();
 				}
 			}
-		} catch (IOException | org.jdom2.JDOMException e){
+		} catch (IOException | JDOMException e){
 			console.sendMessage(ChatColor.RED+"FAILED to load recipes!");
 			e.printStackTrace();
 		}
@@ -83,15 +87,16 @@ public class Mechanization extends JavaPlugin {
 		try {
 			factoriesDoc = XMLPlugin.read(new File(getDataFolder(), "factories.xml"));
 			console.sendMessage(ChatColor.WHITE+"Loading factories...");
-			for (org.jdom2.Element element : factoriesDoc.getRootElement().getChildren()){
+			for (Element element : factoriesDoc.getRootElement().getChildren()){
 				try {
 					MechaFactory mi = new MechaFactory(element);
+					factories.put(mi.getName(), mi);
 					console.sendMessage(ChatColor.WHITE+"  Loaded "+ChatColor.translateAlternateColorCodes('&', mi.getDisplayName()));
 				} catch (MechaException e){
 					e.printStackTrace();
 				}
 			}
-		} catch (IOException | org.jdom2.JDOMException e){
+		} catch (IOException | JDOMException e){
 			console.sendMessage(ChatColor.RED+"FAILED to load factories!");
 			e.printStackTrace();
 		}

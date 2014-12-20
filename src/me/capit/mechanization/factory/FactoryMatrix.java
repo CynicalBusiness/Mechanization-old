@@ -81,12 +81,13 @@ public class FactoryMatrix {
 		}
 	}
 	
-	public List<Position3> getLocationsOfMaterial(Material mat, int data, Position3 relativity){
+	public List<Position3> getLocationsOfMaterial(Material mat, int data){
 		List<Position3> ps = new ArrayList<Position3>();
 		for (int y = 0; y<dims.getY(); y++){ for (int z = 0; z<dims.getZ(); z++){ for (int x = 0; x<dims.getX(); x++){
 			Position3 curpos = new Position3(x,y,z);
-			if (getMaterialAtPosition(curpos)==mat && (getDurabilityAtPosition(curpos)<0)
-					|| data==getDurabilityAtPosition(curpos)) ps.add(curpos.times(relativity));
+			if (getMaterialAtPosition(curpos)!=mat) continue;
+			if (getDurabilityAtPosition(curpos)>-1 && data==getDurabilityAtPosition(curpos)) continue;
+			ps.add(curpos);
 		}}}
 		return ps;
 	}
