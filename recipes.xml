@@ -22,8 +22,8 @@
         <keys>
             <key char="C" material="COAL" amount="4"/>
             <key char="i" material="IRON_ORE" amount="16"/>
-            <key char="s" material="SAND" amount="16"/>
-            <key char="g" material="GRAVEL" amount="8"/>
+            <key char="s" material="SAND" amount="8"/>
+            <key char="g" material="GRAVEL" amount="4"/>
             <key char="I" material="IRON_INGOT" amount="32"/>
             <key char="c" material="COBBLESTONE" amount="16"/>
         </keys>
@@ -43,7 +43,7 @@
     </recipe>
     <recipe name="factory_wrench">
         <meta display="&amp;7Wrench &amp;fProduction" description="Makes two factory wrenches." fuel_cost="16"/>
-        <input matrix="   I  I   ,ssOIDIOss,   I I   "/>
+        <input matrix="   I I   ,ssOIDIOss,   I I   "/>
         <output matrix="         ,   W W   ,         "/>
         <keys>
             <key char="I" material="IRON_INGOT" amount="2"/>
