@@ -4,10 +4,10 @@
 	    <meta display="Foundry" color="GRAY" description="A basic metals factory."/>
 	    	<!-- Do not include colors in the diplay name!
 	    		 Colors should be of https://hub.spigotmc.org/javadocs/spigot/org/bukkit/ChatColor.html -->
-	    <data fuel_time="4" activator="!factory_wrench" consume="0" damage="1" capture_events="true"/>
+	    <data fuel_time="4" activator="IRON_PICKAXE" consume="0" damage="1" capture_events="true"/>
 	    	<!-- Activators can use custom items: simply preceede the name with '!'. -->
 	    <recipes>
-	        steel
+	        steel,iron,gold,factory_wrench
 	    </recipes>
 	    <matrix width="5" height="3" depth="2" chestX="2" chestY="0" chestZ="0">
 	        <!-- Width, height, and depth are X, Y, and Z respectively. 0,0,0 is the lower-left corner closest to the front. -->

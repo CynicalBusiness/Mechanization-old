@@ -15,4 +15,42 @@
             <key char="c" material="COBBLESTONE" amount="16"/>
         </keys>
     </recipe>
+    <recipe name="iron">
+        <meta display="&amp;7Iron Smelting" description="A more efficient way of refining iron." fuel_cost="4"/>
+        <input matrix=" C  C  C ,sississis, s  s  s "/>
+        <output matrix="         ,gIggcggIg, c  c  c "/>
+        <keys>
+            <key char="C" material="COAL" amount="4"/>
+            <key char="i" material="IRON_ORE" amount="16"/>
+            <key char="s" material="SAND" amount="16"/>
+            <key char="g" material="GRAVEL" amount="8"/>
+            <key char="I" material="IRON_INGOT" amount="32"/>
+            <key char="c" material="COBBLESTONE" amount="16"/>
+        </keys>
+    </recipe>
+    <recipe name="gold">
+        <meta display="&amp;eGold &amp;7Smelting" description="A more efficient way of refining gold." fuel_cost="8"/>
+        <input matrix=" C  C  C ,sississis, s  s  s "/>
+        <output matrix="         ,gIggcggIg, c  c  c "/>
+        <keys>
+            <key char="C" material="COAL" amount="4"/>
+            <key char="i" material="GOLD_ORE" amount="8"/>
+            <key char="s" material="SAND" amount="16"/>
+            <key char="g" material="GRAVEL" amount="8"/>
+            <key char="I" material="GOLD_INGOT" amount="16"/>
+            <key char="c" material="COBBLESTONE" amount="16"/>
+        </keys>
+    </recipe>
+    <recipe name="factory_wrench">
+        <meta display="&amp;7Wrench &amp;fProduction" description="Makes two factory wrenches." fuel_cost="16"/>
+        <input matrix="   I  I   ,ssOIDIOss,   I I   "/>
+        <output matrix="         ,   W W   ,         "/>
+        <keys>
+            <key char="I" material="IRON_INGOT" amount="2"/>
+            <key char="s" material="STICK" amount="2"/>
+            <key char="O" material="OBSIDIAN" amount="1"/>
+            <key char="D" material="DIAMOND" amount="2"/>
+            <key char="W" material="!factory_wrench" amount="1"/>
+        </keys>
+    </recipe>
 </recipes>
