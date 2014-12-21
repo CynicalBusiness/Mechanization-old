@@ -2,7 +2,7 @@
 <items>
     <item name="factory_wrench">
         <meta display="&amp;7Factory Wrench" lore="A wrench used to start factories."/>
-        <data material="IRON_HOE" data="0"/>
+        <data material="GOLD_HOE" data="0"/>
     </item>
     <item name="steel">
         <meta display="&amp;8Steel" lore="A lightweight but sturdy alloy."/>
