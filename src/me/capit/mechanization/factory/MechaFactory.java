@@ -55,6 +55,7 @@ public class MechaFactory implements Mechanized, Serializable {
 			
 			Element recs = element.getChild("recipes");
 			for (String rec : recs.getValue().trim().split(",")){
+				rec=rec.trim();
 				if (!Mechanization.recipes.containsKey(rec)){
 					Bukkit.getServer().getLogger().info("Failed to find recipe "+rec);
 					continue;
