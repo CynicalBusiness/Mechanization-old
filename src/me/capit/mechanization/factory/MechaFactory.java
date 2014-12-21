@@ -119,7 +119,7 @@ public class MechaFactory implements Mechanized, Serializable {
 			return true;
 		} else if (activator.getAmount()>consume) {
 			activator.setAmount(activator.getAmount()-consume);
-			activator.setDurability((short) (activator.getDurability() - damage));
+			activator.setDurability((short) (activator.getDurability() + damage));
 			return true;
 		}
 		return false;
