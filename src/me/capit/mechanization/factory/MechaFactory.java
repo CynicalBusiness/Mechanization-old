@@ -107,8 +107,7 @@ public class MechaFactory implements Mechanized, Serializable {
 	public boolean validActivator(ItemStack activator){
 		if ((activator==null && getActivator()!=null) || (activator!=null && getActivator()==null)) return false;
 		return RecipeMatrix.materialMatches(activator, getActivator())
-				&& RecipeMatrix.metaMatches(activator, getActivator())
-				&& (getActivatorDamage()==0 || RecipeMatrix.durabilityMatches(activator, getActivator()));
+				&& RecipeMatrix.metaMatches(activator, getActivator());
 	}
 	
 	public boolean applyActivatorEffects(ItemStack activator){
