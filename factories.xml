@@ -67,7 +67,20 @@
 	</factory>
 	    <factory name="Saw Mill">
 	    	    <meta display="Saw Mill" color="GRAY" description="A basic Saw Mill."/>
-	    	     	<data fuel_time="4" activator="IRON_PICKAXE" consume="0" damage="1" capture_events="true"/>
-	    	     	
+	    	     	<data fuel_time="4" activator="FACTORY_WRENCH" consume="0" damage="1" capture_events="true"/>
+	    	     	<recepies>
+	    	     		dark_oak_planks, oak_planks, spruce_planks, birch_planks, jungle_planks
+	    	     	</recepies>
+	    	     	<matrix width="5" height="5" depth="3" chestX="2" chestY="0" chestZ="0">
+	    	     		  <matrixY>
+	    	     		  	 <matrixZ>
+	    	     		  	 	<matrixX material= "WOOD_PLANK"/>
+	    	     		  	 	<matrixX material= "FURNACE"/>
+	    	     		  	 	<matrixX material= "CHEST"/>
+	    	     		  	 	<matrixX material= "FURNACE"/>
+	    	     		  	 	<matrixX material= "WOOd_PLANK"/>
+	    	     		  	</matrixZ>
+	    	     		  	<matrixZ>
+	    	     		  
 	   </factory>
 </factories>
