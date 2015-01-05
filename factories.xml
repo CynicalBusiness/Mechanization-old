@@ -67,5 +67,7 @@
 	</factory>
 	    <factory name="Saw Mill">
 	    	    <meta display="Saw Mill" color="GRAY" description="A basic Saw Mill."/>
+	    	     	<data fuel_time="4" activator="IRON_PICKAXE" consume="0" damage="1" capture_events="true"/>
+	    	     	
 	   </factory>
 </factories>
