@@ -65,4 +65,6 @@
 	        </matrixY>
 	    </matrix>
 	</factory>
+	    <factory name="Saw Mill">
+	    	    <meta display="Saw Mill" color="GRAY" description="A basic Saw Mill."/>
 </factories>
