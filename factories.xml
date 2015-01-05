@@ -78,9 +78,46 @@
 	    	     		  	 	<matrixX material= "FURNACE"/>
 	    	     		  	 	<matrixX material= "CHEST"/>
 	    	     		  	 	<matrixX material= "FURNACE"/>
-	    	     		  	 	<matrixX material= "WOOd_PLANK"/>
+	    	     		  	 	<matrixX material= "WOOD_PLANK"/>
 	    	     		  	</matrixZ>
+	    	     		  </matrixY>
+	    	     		  <matrixY>
 	    	     		  	<matrixZ>
+         		  			<matrixX material= "FENCE_POST"/>
+         		  			<matrixX/>
+	    	     				<matrixX/>
+	    	     				<matrixX/>
+	    	     				<matrixX material= "FENCE_POST"/>
+	    	     			<matrixZ/>
+	    	     		<matrixY/>
+	    	     		<matrixY>
+	    	     			<matrixZ>
+         		  			<matrixX material= "FENCE_POST"/>
+         		  			<matrixX/>
+	    	     				<matrixX/>
+	    	     				<matrixX/>
+	    	     				<matrixX material= "FENCE_POST"/>
+	    	     			<matrixZ/>
+	    	     		<matrixY/>
+	    	     		<matrixY>
+	    	     			<matrixZ>
+         		  			<matrixX material= "FENCE_POST"/>
+         		  			<matrixX/>
+	    	     				<matrixX/>
+	    	     				<matrixX/>
+	    	     				<matrixX material= "FENCE_POST"/>
+	    	     			<matrixZ/>
+	    	     		<matrixY/>
+	    	     		<matrixY>
+	    	     			<matrixZ>
+	    	     				<matrixX material = "WOOD_STAIR"/>
+	    	     				<matrixX material = "WOOD_STAIR"/>
+	    	     				<matrixX material = "WOOD_STAIR"/>
+	    	     				<matrixX material = "WOOD_STAIR"/>
+	    	     				<matrixX material = "WOOD_STAIR"/>
+	    	     			<matrixZ/>
+	    	     			
+	    	     		</matrixY>
 	    	     		  
 	   </factory>
 </factories>
