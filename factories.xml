@@ -124,15 +124,6 @@
 	    	     		  		<matrixX material="WOOD_PLANK"/>
 	    	     		  	</matrixZ>
 	    	     		  </matrixY>
-	    	     		  <matrixY>
-	    	     		  	<matrixZ>
-         		  			<matrixX material="FENCE_POST"/>
-         		  			<matrixX material="AIR"/>
-	    	     				<matrixX material="AIR"/>
-	    	     				<matrixX material="AIR"/>
-	    	     				<matrixX material="FENCE_POST"/>
-	    	     			</matrixZ>
-	    	     		</matrixY>
 	    	     		<matrixY>
 	    	     			<matrixZ>
          		  			<matrixX material="FENCE_POST"/>
