@@ -68,7 +68,7 @@
 	</factory>
 	    <factory name="Saw Mill">
 	    	    <meta display="Saw Mill" color="GRAY" description="A basic Saw Mill."/>
-	    	     	<data fuel_time="4" activator="FACTORY_WRENCH" consume="0" damage="1" capture_events="true"/>
+	    	     	<data fuel_time="4" activator="!factory_wrench" consume="0" damage="1" capture_events="true"/>
 	    	     	<recipes>
 	    	     		dark_oak_planks, oak_planks, spruce_planks, birch_planks, jungle_planks
 	    	     	</recipes>
