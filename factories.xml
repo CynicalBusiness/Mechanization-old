@@ -227,7 +227,7 @@
 	    	     			</matrixZ>
 	    	     		
 	    	     		
-	    	     		<matrixY/>
+	    	     		</matrixY>
 	    	     		<matrixY>
 	    	     			<matrixZ>
 	    	     				<matrixX material="WOOD_STAIR"/>
