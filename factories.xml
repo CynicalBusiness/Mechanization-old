@@ -279,4 +279,96 @@
 			</matrixY>
 		</matrix>
 	</factory>
+	<factory name="kiln">
+	    <meta display="Kiln" color="RED" description="An oven for dry cooking."/>
+	    <data fuel_time="8" activator="TORCH" consume="1" damage="0" capture_events="true"/>
+	    <recipes>brick,stained_clay</recipes><!-- Going to add more -->
+	    <matrix width="3" height="5" depth="3" chestX="1" chestY="2" chestZ="0">
+	        <matrixY>
+	            <matrixZ>
+	                <matrixX material="BRICK"/>
+	                <matrixX material="FURNACE"/>
+	                <matrixX material="BRICK"/>
+	            </matrixZ>
+	            <matrixZ>
+	                <matrixX material="FURNACE"/>
+	                <matrixX material="COAL_BLOCK"/>
+	                <matrixX material="FURNACE"/>
+	            </matrixZ>
+	            <matrixZ>
+	                <matrixX material="BRICK"/>
+	                <matrixX material="FURNACE"/>
+	                <matrixX material="BRICK"/>
+	            </matrixZ>
+	        </matrixY>
+	        <matrixY>
+	            <matrixZ>
+	                <matrixX material="BRICK"/>
+	                <matrixX material="FURNACE"/>
+	                <matrixX material="BRICK"/>
+	            </matrixZ>
+	            <matrixZ>
+	                <matrixX material="FURNACE"/>
+	                <matrixX material="AIR"/>
+	                <matrixX material="FURNACE"/>
+	            </matrixZ>
+	            <matrixZ>
+	                <matrixX material="BRICK"/>
+	                <matrixX material="FURNACE"/>
+	                <matrixX material="BRICK"/>
+	            </matrixZ>
+	        </matrixY>
+	        <matrixY>
+	            <matrixZ>
+	                <matrixX material="STAINED_CLAY"/>
+	                <matrixX material="CHEST"/>
+	                <matrixX material="STAINED_CLAY"/>
+	            </matrixZ>
+	            <matrixZ>
+	                <matrixX/>
+	                <matrixX material="STONE_BRICK"/>
+	                <matrixX/>
+	            </matrixZ>
+	            <matrixZ>
+	                <matrixX material="STAINED_CLAY"/>
+	                <matrixX/>
+	                <matrixX material="STAINED_CLAY"/>
+	            </matrixZ>
+	        </matrixY>
+	        <matrixY>
+	            <matrixZ>
+	                <matrixX material="AIR"/>
+	                <matrixX material="SLAB"/>
+	                <matrixX material="AIR"/>
+	            </matrixZ>
+	            <matrixZ>
+	                <matrixX material="AIR"/>
+	                <matrixX material="STONE_BRICK"/>
+	                <matrixX material="AIR"/>
+	            </matrixZ>
+	            <matrixZ>
+	                <matrixX material="AIR"/>
+	                <matrixX material="SLAB"/>
+	                <matrixX material="AIR"/>
+	            </matrixZ>
+	        </matrixY>
+	        <matrixY>
+	            <matrixZ>
+	                <matrixX material="AIR"/>
+	                <matrixX material="AIR"/>
+	                <matrixX material="AIR"/>
+	            </matrixZ>
+	            <matrixZ>
+	                <matrixX material="AIR"/>
+	                <matrixX material="IRON_BLOCK"/>
+	                <matrixX material="AIR"/>
+	            </matrixZ>
+	            <matrixZ>
+	                <matrixX material="AIR"/>
+	                <matrixX material="AIR"/>
+	                <matrixX material="AIR"/>
+	            </matrixZ>
+	        </matrixY>
+	    </matrix>
+	</factory>
 </factories>
