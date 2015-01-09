@@ -53,4 +53,64 @@
             <key char="W" material="!factory_wrench" amount="1"/>
         </keys>
     </recipe>
+    <recipe name="dark_oak_planks"
+        <meta display="&amp;7DarkOak plank &amp;fCutting" description="Makes 6 planks per log." fuel_cost="8"/>
+        <input matrix="  C C C  , L L L L ,         "/>
+        <output matrix="ppppppppp,ppppppppp,pppppp   "/>
+        <keys>
+            <key char="C" material="COAL" amount="8"/>
+            <key char="L" material="LOG2" data="1" amount="64"/>
+            <key char="p" material="WOOD" data="5" amount="64"/>    
+        </keys>
+    </recipe>
+    <recipe name="oak_planks"
+        <meta display="&amp;7Oak plank &amp;fCutting" description="Makes 6 planks per log." fuel_cost="8"/>
+        <input matrix="  C C C  , L L L L ,         "/>
+        <output matrix="ppppppppp,ppppppppp,pppppp   "/>
+        <keys>
+            <key char="C" material="COAL" amount="8"/>
+            <key char="L" material="LOG" data="0" amount="64"/>
+            <key char="p" material="WOOD" data="0" amount="64"/>    
+        </keys>
+    </recipe>
+    <recipe name="spruce_planks"
+        <meta display="&amp;Spruce plank &amp;fCutting" description="Makes 6 planks per log." fuel_cost="8"/>
+        <input matrix="  C C C  , L L L L ,         "/>
+        <output matrix="ppppppppp,ppppppppp,pppppp   "/>
+        <keys>
+            <key char="C" material="COAL" amount="8"/>
+            <key char="L" material="LOG" data="1" amount="64"/>
+            <key char="p" material="WOOD" data="1" amount="64"/>    
+        </keys>
+    </recipe>
+    <recipe name="birch_planks"
+        <meta display="&amp;7Birch plank &amp;fCutting" description="Makes 6 planks per log." fuel_cost="8"/>
+        <input matrix="  C C C  , L L L L ,         "/>
+        <output matrix="ppppppppp,ppppppppp,pppppp   "/>
+        <keys>
+            <key char="C" material="COAL" amount="8"/>
+            <key char="L" material="LOG" data="2" amount="64"/>
+            <key char="p" material="WOOD" data="2" amount="64"/>    
+        </keys>
+    </recipe>
+    <recipe name="jungle_planks"
+        <meta display="&amp;7Jungle Plank &amp;fCutting" description="Makes 6 planks per log." fuel_cost="8"/>
+        <input matrix="  C C C  , L L L L ,         "/>
+        <output matrix="ppppppppp,ppppppppp,pppppp   "/>
+        <keys>
+            <key char="C" material="COAL" amount="8"/>
+            <key char="L" material="LOG" data="3" amount="64"/>
+            <key char="p" material="WOOD" data="3" amount="64"/>    
+        </keys>
+    </recipe>
+     <recipe name="acacia_planks"
+        <meta display="&amp;7Acacia Plank &amp;fCutting" description="Makes 6 planks per log." fuel_cost="8"/>
+        <input matrix="  C C C  , L L L L ,         "/>
+        <output matrix="ppppppppp,ppppppppp,pppppp   "/>
+        <keys>
+            <key char="C" material="COAL" amount="8"/>
+            <key char="L" material="LOG2" data="4" amount="64"/>
+            <key char="p" material="WOOD" data="4" amount="64"/>    
+        </keys>
+    </recipe>
 </recipes>
