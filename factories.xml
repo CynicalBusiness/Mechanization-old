@@ -372,12 +372,48 @@
 	    </matrix>
 	</factory>
 	<factory name="Gem Smelting">
-		<meta display="Gem Smelting" color="AQUA" description="A Factory for precious gems."/>
+		<meta display="Gem Smelting" color="AQUA" description="A factory for precious gems."/>
 		<data fuel_time="8" activator="!factory_wrench" consume="0" damage="2" capture_events="true"/>
 		<recipies>diamond_smelting,glowstone</recipies>
-		<matrix width="" height="" depth="" chestX="" chestY="" chestZ="">
+		<matrix width="6" height="3" depth="4" chestX="3" chestY="" chestZ="">
 			<!-- Can one of you guys come up with a design for this,since I dont particularly know
-			what you'd be looking for for this kind of thing  -Sean-->
+			what you'd be looking for for this kind of thing. Just delete this once you've done that
+			-Sean-->
+			<matrixY>
+				<matrixZ>
+					<matrixX material="NETHER_BRICK"/>
+					<matrixX material="NETHER_BRICK"/>
+					<matrixX material="NETHER_BRICK"/>
+					<matrixX material="CHEST"/>
+					<matrixX material="NETHER_BRICK"/>
+					<matrixX material="NETHER_BRICK"/>
+				</matrixZ>
+				<matrixZ>
+					<matrixX material="NETHER_BRICK"/>
+					<matrixX material="NETHER_BRICK"/>
+					<matrixX material="NETHER_BRICK"/>
+					<matrixX material="NETHER_BRICK"/>
+					<matrixX material="NETHER_BRICK"/>
+					<matrixX material="NETHER_BRICK"/>
+				</matrixZ>
+				<matrixZ>
+					<matrixX material="NETHER_BRICK"/>
+					<matrixX material="NETHER_BRICK"/>
+					<matrixX material="NETHER_BRICK"/>
+					<matrixX material="NETHER_BRICK"/>
+					<matrixX material="NETHER_BRICK"/>
+					<matrixX material="NETHER_BRICK"/>
+				</matrixZ>
+				<matrixZ>
+					<matrixX material="NETHER_BRICK"/>
+					<matrixX material="NETHER_BRICK"/>
+					<matrixX material="NETHER_BRICK"/>
+					<matrixX material="NETHER_BRICK"/>
+					<matrixX material="NETHER_BRICK"/>
+					<matrixX material="NETHER_BRICK"/>
+				</matrixZ>
+			</matrixY>
 		</matrix>
 	</factory>
 </factories>
+
