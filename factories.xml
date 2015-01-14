@@ -338,7 +338,7 @@
 	        <matrixY>
 	            <matrixZ>
 	                <matrixX material="AIR"/>
-	                <matrixX material="SLAB"/>
+	                <matrixX material="SLAB2"/>
 	                <matrixX material="AIR"/>
 	            </matrixZ>
 	            <matrixZ>
@@ -348,7 +348,7 @@
 	            </matrixZ>
 	            <matrixZ>
 	                <matrixX material="AIR"/>
-	                <matrixX material="SLAB"/>
+	                <matrixX material="SLAB2"/>
 	                <matrixX material="AIR"/>
 	            </matrixZ>
 	        </matrixY>
