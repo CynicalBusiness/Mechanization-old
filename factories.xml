@@ -374,6 +374,10 @@
 	<factory name="Gem Smelting">
 		<meta display="Gem Smelting" color="AQUA" description="A Factory for precious gems."/>
 		<data fuel_time="8" activator="!factory_wrench" consume="0" damage="2" capture_events="true"/>
-		<recipies>diamond_smelting</recipies>
+		<recipies>diamond_smelting,glowstone</recipies>
+		<matrix width="" height="" depth="" chestX="" chestY="" chestZ="">
+			<!-- Can one of you guys come up with a design for this,since I dont particularly know
+			what you'd be looking for for this kind of thing  -Sean-->
+		</matrix>
 	</factory>
 </factories>
