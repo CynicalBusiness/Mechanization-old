@@ -371,4 +371,9 @@
 	        </matrixY>
 	    </matrix>
 	</factory>
+	<factory name="Gem Smelting">
+		<meta display="Gem Smelting" color="AQUA" description="A Factory for precious gems."/>
+		<data fuel_time="8" activator="!factory_wrench" consume="0" damage="2" capture_events="true"/>
+		<recipies>diamond_smelting</recipies>
+	</factory>
 </factories>
