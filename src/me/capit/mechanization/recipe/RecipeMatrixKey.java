@@ -1,36 +1,36 @@
 package me.capit.mechanization.recipe;
 
-import me.capit.mechanization.Mechanization;
+import me.capit.eapi.data.DataModel;
+import me.capit.eapi.item.GameItem;
+import me.capit.eapi.item.ItemHandler;
 import me.capit.mechanization.exception.MechaException;
-import me.capit.mechanization.item.MechaItem;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.jdom2.Element;
 
 public class RecipeMatrixKey {
 	private final char keyChar;
 	private final Material material;
 	private final int data,amount;
 	
-	private final MechaItem mechaItem;
+	private final GameItem mechaItem;
 	
-	public RecipeMatrixKey(Element keyElement) throws MechaException{
-		if (!keyElement.getName().equals("key")) throw new MechaException().new InvalidElementException("key", keyElement.getName());
+	public RecipeMatrixKey(DataModel model) throws MechaException{
+		if (!model.getName().equals("key")) throw new MechaException().new InvalidElementException("key", model.getName());
 		try {
-			if (keyElement.getAttribute("char")!=null) keyChar = keyElement.getAttributeValue("char").charAt(0); else throw null;
-			if (keyElement.getAttribute("material")==null){
-				mechaItem = null; material = null; data = -1;
-			} else if (keyElement.getAttributeValue("material").startsWith("!")){
-				mechaItem = Mechanization.items.get(keyElement.getAttributeValue("material").substring(1));
-				material = mechaItem!=null ? mechaItem.getBaseMaterial() : Material.AIR;
-				data = mechaItem!=null ? mechaItem.getBaseData() : -1;
+			keyChar = model.getAttribute("char").getValueString().charAt(0);
+			if (model.getAttribute("material")==null){
+				mechaItem = null; material = null;
+			} else if (model.getAttribute("material").getValueString().startsWith("!")){
+				mechaItem = ItemHandler.getItem(model.getAttribute("material").getValueString());
+				if (mechaItem==null) throw new MechaException("Custom item missing!");
+				material = mechaItem.getMaterial();
 			} else {
 				mechaItem = null;
-				material = Material.valueOf(keyElement.getAttributeValue("material"));
-				data = keyElement.getAttribute("data")!=null ? Integer.parseInt(keyElement.getAttributeValue("data")) : -1;
+				material = Material.valueOf(model.getAttribute("material").getValueString());
 			}
-			amount = keyElement.getAttribute("amount")!=null ? Integer.parseInt(keyElement.getAttributeValue("amount")) : 1;
+			data = model.getAttribute("data")!=null ? Integer.parseInt(model.getAttribute("data").getValueString()) : -1;
+			amount = model.getAttribute("amount")!=null ? Integer.parseInt(model.getAttribute("amount").getValueString()) : -1;
 		} catch (NullPointerException | IllegalArgumentException e){
 			throw new MechaException().new MechaAttributeInvalidException("Null or invalid tag/attribute value for key!");
 		}
@@ -56,17 +56,12 @@ public class RecipeMatrixKey {
 	public int getAmount(){
 		return amount;
 	}
-	public boolean matchesStack(ItemStack is){
-		if ((material==null || material==Material.AIR) && is==null) return true;
-		if (is==null) return false;
-		if (material!=null && is.getType()!=material) return false;
-		if (data>-1 && is.getDurability()!=data) return false;
-		if (material!=Material.AIR && amount>-1 && amount!=is.getAmount()) return false;
-		return true;
+	public boolean matchesStack(ItemStack is) throws IllegalArgumentException {
+		return ItemHandler.stackEquals(getItemStack(), is, amount>=0, data>=0);
 	}
 	
 	public ItemStack getItemStack() throws IllegalArgumentException {
-		if (mechaItem!=null) return mechaItem.getItemStack(amount);
+		if (mechaItem!=null) return mechaItem.getItemStack(amount, data);
 		if (material==null) throw new IllegalArgumentException();
 		ItemStack is = new ItemStack(material, amount);
 		if (data>-1) is.setDurability((short) data);

@@ -6,9 +6,7 @@
 	    		 Colors should be of https://hub.spigotmc.org/javadocs/spigot/org/bukkit/ChatColor.html -->
 	    <data fuel_time="4" activator="IRON_PICKAXE" consume="0" damage="1" capture_events="true"/>
 	    	<!-- Activators can use custom items: simply preceede the name with '!'. -->
-	    <recipes>
-	        steel,iron,gold,factory_wrench
-	    </recipes>
+	    <data-value name="recipes">steel,iron,gold,factory_wrench</data-value>
 	    <matrix width="5" height="3" depth="2" chestX="2" chestY="0" chestZ="0">
 	        <!-- Width, height, and depth are X, Y, and Z respectively. 0,0,0 is the lower-left corner closest to the front. -->
 	        <!-- You must have the correct number of matrix axies per these values. -->
@@ -69,9 +67,7 @@
 	<factory name="Saw Mill">
 		<meta display="Saw Mill" color="GRAY" description="A basic Saw Mill."/>
 		<data fuel_time="4" activator="!factory_wrench" consume="0" damage="1" capture_events="true"/>
-		<recipes>
-			dark_oak_planks, oak_planks, spruce_planks, birch_planks, jungle_planks
-		</recipes>
+		<data-value name="recipes">dark_oak_planks, oak_planks, spruce_planks, birch_planks, jungle_planks</data-value>
 		<matrix width="5" height="5" depth="7" chestX="2" chestY="0" chestZ="0">
 			<matrixY>
 				<matrixZ>
@@ -282,7 +278,7 @@
 	<factory name="kiln">
 	    <meta display="Kiln" color="RED" description="An oven for dry cooking."/>
 	    <data fuel_time="8" activator="TORCH" consume="1" damage="0" capture_events="true"/>
-	    <recipes>brick,stained_clay</recipes><!-- Going to add more -->
+	    <data-value name="recipes">brick,stained_clay</data-value>
 	    <matrix width="3" height="5" depth="3" chestX="1" chestY="2" chestZ="0">
 	        <matrixY>
 	            <matrixZ>
@@ -338,7 +334,7 @@
 	        <matrixY>
 	            <matrixZ>
 	                <matrixX material="AIR"/>
-	                <matrixX material="SLAB"/>
+	                <matrixX material="SLAB2"/>
 	                <matrixX material="AIR"/>
 	            </matrixZ>
 	            <matrixZ>
@@ -348,7 +344,7 @@
 	            </matrixZ>
 	            <matrixZ>
 	                <matrixX material="AIR"/>
-	                <matrixX material="SLAB"/>
+	                <matrixX material="SLAB2"/>
 	                <matrixX material="AIR"/>
 	            </matrixZ>
 	        </matrixY>

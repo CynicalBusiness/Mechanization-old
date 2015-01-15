@@ -2,8 +2,7 @@
 <recipes>
     <recipe name="steel">
         <meta display="&amp;8Steel &amp;7Smelting" description="Smelts steel from iron and coal." fuel_cost="16"/>
-        <input matrix=" C  C  C , CIICIIC , C SCS C "/>
-        <output matrix="         ,  ss ss  ,   c c   "/>
+        <shape input=" C  C  C , CIICIIC , C SCS C " output="         ,  ss ss  ,   c c   "/>
         <keys>
             <!-- Like the factory matrix, any non-specified material/data will match any material/data respectively. -->
             <!-- Precede materials with an '!' to use custom items defined in the items.xml file. -->
@@ -17,8 +16,7 @@
     </recipe>
     <recipe name="iron">
         <meta display="&amp;7Iron Smelting" description="A more efficient way of refining iron." fuel_cost="4"/>
-        <input matrix=" C  C  C ,sississis, s  s  s "/>
-        <output matrix="         ,gIggcggIg, c  c  c "/>
+        <shape input=" C  C  C ,sississis, s  s  s " output="         ,gIggcggIg, c  c  c "/>
         <keys>
             <key char="C" material="COAL" amount="4"/>
             <key char="i" material="IRON_ORE" amount="16"/>
@@ -30,8 +28,7 @@
     </recipe>
     <recipe name="gold">
         <meta display="&amp;eGold &amp;7Smelting" description="A more efficient way of refining gold." fuel_cost="8"/>
-        <input matrix=" C  C  C ,sississis, s  s  s "/>
-        <output matrix="         ,gIggcggIg, c  c  c "/>
+        <shape input=" C  C  C ,sississis, s  s  s " output="         ,gIggcggIg, c  c  c "/>
         <keys>
             <key char="C" material="COAL" amount="4"/>
             <key char="i" material="GOLD_ORE" amount="8"/>
@@ -43,8 +40,7 @@
     </recipe>
     <recipe name="factory_wrench">
         <meta display="&amp;7Wrench &amp;fProduction" description="Makes two factory wrenches." fuel_cost="16"/>
-        <input matrix="   I I   ,ssOIDIOss,   I I   "/>
-        <output matrix="         ,   W W   ,         "/>
+        <shape input="   I I   ,ssOIDIOss,   I I   " output="         ,   W W   ,         "/>
         <keys>
             <key char="I" material="IRON_INGOT" amount="2"/>
             <key char="s" material="STICK" amount="2"/>

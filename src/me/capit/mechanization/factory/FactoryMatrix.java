@@ -3,36 +3,36 @@ package me.capit.mechanization.factory;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.capit.mechanization.Position3;
+import me.capit.eapi.data.DataModel;
+import me.capit.eapi.math.Vector3;
 import me.capit.mechanization.exception.MechaException;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.jdom2.Element;
 
 public class FactoryMatrix {
-	private final Position3 dims,chestLoc;
-	private final Element[][][] matrix;
+	private final Vector3 dims,chestLoc;
+	private final DataModel[][][] matrix;
 	
-	public FactoryMatrix(Element element) throws NullPointerException, IllegalArgumentException, MechaException{
-		if (!element.getName().equals("matrix")) throw new MechaException().new InvalidElementException("matrix", element.getName());
+	public FactoryMatrix(DataModel model) throws NullPointerException, IllegalArgumentException, MechaException{
+		if (!model.getName().equals("matrix")) throw new MechaException().new InvalidElementException("matrix", model.getName());
 		
-		dims = new Position3(
-				Integer.parseInt(element.getAttributeValue("width")),
-				Integer.parseInt(element.getAttributeValue("height")),
-				Integer.parseInt(element.getAttributeValue("depth")));
-		chestLoc = new Position3(
-				Integer.parseInt(element.getAttributeValue("chestX")),
-				Integer.parseInt(element.getAttributeValue("chestY")),
-				Integer.parseInt(element.getAttributeValue("chestZ")));
+		dims = new Vector3(
+				Double.parseDouble(model.getAttribute("width").getValueString()),
+				Double.parseDouble(model.getAttribute("height").getValueString()),
+				Double.parseDouble(model.getAttribute("depth").getValueString()));
+		chestLoc = new Vector3(
+				Double.parseDouble(model.getAttribute("chestX").getValueString()),
+				Double.parseDouble(model.getAttribute("chestY").getValueString()),
+				Double.parseDouble(model.getAttribute("chestZ").getValueString()));
 		
 		try {
-			matrix = new Element[(int) dims.getY()][(int) dims.getZ()][(int) dims.getX()];
-			for (int j = 0; j<dims.getY(); j++) for (int k = 0; k<dims.getZ(); k++) for (int l = 0; l<dims.getX(); l++) 
-				matrix[j][k][l] = element.getChildren().get(j).getChildren().get(k).getChildren().get(l);
+			matrix = new DataModel[(int) dims.y][(int) dims.z][(int) dims.x];
+			for (int j = 0; j<dims.y; j++) for (int k = 0; k<dims.z; k++) for (int l = 0; l<dims.x; l++) 
+				matrix[j][k][l] = (DataModel) ((DataModel) ((DataModel) model.getChildren().get(j)).getChildren().get(k)).getChildren().get(l);
 			
-			Element chest = matrix[(int) chestLoc.getY()][(int) chestLoc.getZ()][(int) chestLoc.getX()];
-			if (!chest.getAttributeValue("material").equals("CHEST")) throw null;
+			DataModel chest = matrix[(int) chestLoc.y][(int) chestLoc.z][(int) chestLoc.x];
+			if (!chest.getAttribute("material").getValueString().equals("CHEST")) throw null;
 
 			if (glitchInMatrix()) throw new ArrayIndexOutOfBoundsException();
 		} catch (ArrayIndexOutOfBoundsException e){
@@ -41,23 +41,23 @@ public class FactoryMatrix {
 	}
 	
 	private boolean glitchInMatrix(){ // Huehuehue.
-		for (Element[][] e2 : matrix) for (Element[] e1 : e2) for (Element e : e1) if (e==null) return true;
+		for (DataModel[][] e2 : matrix) for (DataModel[] e1 : e2) for (DataModel e : e1) if (e==null) return true;
 		return false;
 	}
 	
-	public boolean elementAtPositionRequriesData(Position3 pos){
-		Element e = getElementAtPosition(pos);
+	public boolean elementAtPositionRequriesData(Vector3 pos){
+		DataModel e = getElementAtPosition(pos);
 		return e.getAttribute("data")!=null;
 	}
 	
-	public Element getElementAtPosition(Position3 pos){
-		return matrix[(int) pos.getY()][(int) pos.getZ()][(int) pos.getX()];
+	public DataModel getElementAtPosition(Vector3 pos){
+		return matrix[(int) pos.y][(int) pos.z][(int) pos.x];
 	}
 	
-	public Material getMaterialAtPosition(Position3 pos){
-		Element ise = getElementAtPosition(pos);
+	public Material getMaterialAtPosition(Vector3 pos){
+		DataModel ise = getElementAtPosition(pos);
 		try {
-			return Material.valueOf(ise.getAttributeValue("material"));
+			return Material.valueOf(ise.getAttribute("material").getValueString());
 		} catch (NullPointerException e){
 			return null;
 		} catch (IllegalArgumentException e){
@@ -66,12 +66,12 @@ public class FactoryMatrix {
 		}
 	}
 	
-	public short getDurabilityAtPosition(Position3 pos){
-		Element ise = getElementAtPosition(pos);
-		return ise.getAttribute("data")!=null ? Short.parseShort(ise.getAttributeValue("data")) : -1;
+	public short getDurabilityAtPosition(Vector3 pos){
+		DataModel ise = getElementAtPosition(pos);
+		return elementAtPositionRequriesData(pos) ? Short.parseShort(ise.getAttribute("data").getValueString()) : -1;
 	}
 	
-	public ItemStack getItemStackAtPosition(Position3 pos){
+	public ItemStack getItemStackAtPosition(Vector3 pos){
 		try {
 			ItemStack is = new ItemStack(getMaterialAtPosition(pos));
 			if (getDurabilityAtPosition(pos)>-1) is.setDurability(getDurabilityAtPosition(pos));
@@ -81,10 +81,10 @@ public class FactoryMatrix {
 		}
 	}
 	
-	public List<Position3> getLocationsOfMaterial(Material mat, int data){
-		List<Position3> ps = new ArrayList<Position3>();
-		for (int y = 0; y<dims.getY(); y++){ for (int z = 0; z<dims.getZ(); z++){ for (int x = 0; x<dims.getX(); x++){
-			Position3 curpos = new Position3(x,y,z);
+	public List<Vector3> getLocationsOfMaterial(Material mat, int data){
+		List<Vector3> ps = new ArrayList<Vector3>();
+		for (int y = 0; y<dims.y; y++){ for (int z = 0; z<dims.z; z++){ for (int x = 0; x<dims.x; x++){
+			Vector3 curpos = new Vector3(x,y,z);
 			if (getMaterialAtPosition(curpos)!=mat) continue;
 			if (getDurabilityAtPosition(curpos)>-1 && data==getDurabilityAtPosition(curpos)) continue;
 			ps.add(curpos);
@@ -92,11 +92,11 @@ public class FactoryMatrix {
 		return ps;
 	}
 	
-	public Position3 getDims(){
+	public Vector3 getDims(){
 		return dims;
 	}
 	
-	public Position3 getChestLocation(){
+	public Vector3 getChestLocation(){
 		return chestLoc;
 	}
 }

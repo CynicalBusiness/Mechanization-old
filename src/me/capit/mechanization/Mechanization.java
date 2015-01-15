@@ -5,34 +5,32 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
+import me.capit.eapi.DataHandler;
+import me.capit.eapi.data.Child;
+import me.capit.eapi.data.DataFile;
+import me.capit.eapi.data.DataModel;
+import me.capit.eapi.data.value.StringValue;
+import me.capit.eapi.item.GameItem;
+import me.capit.eapi.item.ItemHandler;
 import me.capit.mechanization.exception.MechaException;
 import me.capit.mechanization.factory.MechaFactory;
-import me.capit.mechanization.item.MechaItem;
 import me.capit.mechanization.recipe.MechaFactoryRecipe;
-import me.capit.xmlapi.XMLPlugin;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jdom2.Document;
-import org.jdom2.Element;
 import org.jdom2.JDOMException;
 
 public class Mechanization extends JavaPlugin {
-	public static final HashMap<String, MechaItem> items = new HashMap<String, MechaItem>();
 	public static final HashMap<String, MechaFactoryRecipe> recipes = new HashMap<String, MechaFactoryRecipe>();
 	public static final HashMap<String, MechaFactory> factories = new HashMap<String, MechaFactory>();
 	public static Logger logger; public static ConsoleCommandSender console;
 	public static File pluginDir;
 	
-	public static Document factoriesDoc,itemsDoc,recipesDoc;
+	public static DataFile factoriesFile,itemsFile,recipesFile;
 	
 	public static Mechanization plugin;
-	
-	static {
-		ConfigurationSerialization.registerClass(Position3.class);
-	}
 	
 	@Override
 	public void onEnable(){
@@ -50,16 +48,28 @@ public class Mechanization extends JavaPlugin {
 		
 		this.getServer().getPluginManager().registerEvents(new MechaDataController(this), this);
 		
+		
 		try {
-			itemsDoc = XMLPlugin.read(new File(getDataFolder(), "items.xml"));
+			itemsFile = DataHandler.loadXMLFile(this, "items");
 			console.sendMessage(ChatColor.WHITE+"Loading items...");
-			for (Element element : itemsDoc.getRootElement().getChildren()){
-				try {
-					MechaItem mi = new MechaItem(element);
-					items.put(mi.getName(), mi);
-					console.sendMessage(ChatColor.WHITE+"  Loaded "+mi.getDisplayName());
-				} catch (MechaException e){
-					e.printStackTrace();
+			for (Child child : itemsFile.getChildren()){
+				if (child instanceof DataModel){
+					try {
+						DataModel model = (DataModel) child;
+						String name = model.getAttribute("name").getValueString();
+						String mat = model.getAttribute("material").getValueString().toUpperCase();
+						StringValue display = (StringValue) model.findFirstChild("display");
+						StringValue lore = (StringValue) model.findFirstChild("lore");
+						GameItem item = new GameItem(name, Material.valueOf(mat));
+						item.setDisplayName(ChatColor.translateAlternateColorCodes('&', display.getValue()));
+						item.setLore(lore.getValue().split("\\|"));
+						ItemHandler.registerItem(item);
+						console.sendMessage(ChatColor.WHITE+"  Loaded "+item.getDisplayName());
+					} catch (IllegalArgumentException | NullPointerException | ClassCastException e){
+						console.sendMessage(ChatColor.RED+"  ERROR: "+ChatColor.WHITE+" Bad data member "+child.getName());
+					}
+				} else {
+					console.sendMessage(ChatColor.RED+"  ERROR: "+ChatColor.WHITE+" Unknown member "+child.getName());
 				}
 			}
 		} catch (IOException | JDOMException e){
@@ -68,14 +78,14 @@ public class Mechanization extends JavaPlugin {
 		}
 		
 		try {
-			recipesDoc = XMLPlugin.read(new File(getDataFolder(), "recipes.xml"));
+			recipesFile = DataHandler.loadXMLFile(this, "recipes");
 			console.sendMessage(ChatColor.WHITE+"Loading recipes...");
-			for (Element element : recipesDoc.getRootElement().getChildren()){
+			for (Child element : recipesFile.getChildren()){
 				try {
-					MechaFactoryRecipe mi = new MechaFactoryRecipe(element);
+					MechaFactoryRecipe mi = new MechaFactoryRecipe((DataModel) element);
 					recipes.put(mi.getName(), mi);
 					console.sendMessage(ChatColor.WHITE+"  Loaded "+mi.getDisplayName());
-				} catch (MechaException e){
+				} catch (MechaException | ClassCastException e){
 					e.printStackTrace();
 				}
 			}
@@ -85,14 +95,14 @@ public class Mechanization extends JavaPlugin {
 		}
 		
 		try {
-			factoriesDoc = XMLPlugin.read(new File(getDataFolder(), "factories.xml"));
+			factoriesFile = DataHandler.loadXMLFile(this, "factories");
 			console.sendMessage(ChatColor.WHITE+"Loading factories...");
-			for (Element element : factoriesDoc.getRootElement().getChildren()){
+			for (Child element : factoriesFile.getChildren()){
 				try {
-					MechaFactory mi = new MechaFactory(element);
+					MechaFactory mi = new MechaFactory((DataModel) element);
 					factories.put(mi.getName(), mi);
 					console.sendMessage(ChatColor.WHITE+"  Loaded "+ChatColor.translateAlternateColorCodes('&', mi.getDisplayName()));
-				} catch (MechaException e){
+				} catch (MechaException | ClassCastException e){
 					e.printStackTrace();
 				}
 			}

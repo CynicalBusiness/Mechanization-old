@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import me.capit.eapi.math.Vector3;
 import me.capit.mechanization.Mechanization;
-import me.capit.mechanization.Position3;
 import me.capit.mechanization.exception.MechaException;
 import me.capit.mechanization.recipe.MechaFactoryRecipe;
 
@@ -40,7 +40,7 @@ public class WorldFactory {
 	}
 	
 	private final MechaFactory factory;
-	private final Position3 origin;
+	private final Vector3 origin;
 	private final World world;
 	private final Chest chest;
 	private volatile boolean running = false;
@@ -62,8 +62,8 @@ public class WorldFactory {
 			if (!fac.validActivator(activator)) throw null;
 			this.factory = fac;
 			this.chest = chest;
-			origin = new Position3(chest.getX(),chest.getY(),chest.getZ())
-				.minus(fac.getMatrix().getChestLocation().times(getRelativity()));
+			origin = new Vector3(chest.getX(),chest.getY(),chest.getZ())
+				.subtract(fac.getMatrix().getChestLocation().multiply(getRelativity()));
 			world = chest.getWorld();
 			if (!valid()) throw null;
 		} catch (NullPointerException e){
@@ -126,12 +126,12 @@ public class WorldFactory {
 	
 	public List<Furnace> getFurnaces(){
 		List<Furnace> furnaces = new ArrayList<Furnace>();
-		for (Position3 loc : factory.getFurnaceLocations()){
-			Position3 fur = origin.plus(loc.times(getRelativity()));
-			Block b = world.getBlockAt((int) fur.getX(),(int) fur.getY(),(int) fur.getZ());
+		for (Vector3 loc : factory.getFurnaceLocations()){
+			Vector3 fur = origin.add(loc.multiply(getRelativity()));
+			Block b = world.getBlockAt((int) fur.x,(int) fur.y,(int) fur.z);
 			if (b.getType()!=Material.FURNACE){
 				Bukkit.getServer().getLogger().info("Failed to get furnace at "+b.getX()+","+b.getY()+","+b.getZ()+" from "+b.getType());
-				Bukkit.getServer().getLogger().info("Furnace index "+loc.getX()+","+loc.getY()+","+loc.getZ()+" missing.");
+				Bukkit.getServer().getLogger().info("Furnace index "+loc.x+","+loc.y+","+loc.z+" missing.");
 				break;
 			}
 			Furnace f = (Furnace) b.getState();
@@ -156,7 +156,7 @@ public class WorldFactory {
 	}
 	
 	public Location getOriginLocation(){
-		return new Location(world,origin.getX(),origin.getY(),origin.getZ());
+		return new Location(world,origin.x,origin.y,origin.z);
 	}
 	
 	public boolean valid(){
@@ -171,17 +171,15 @@ public class WorldFactory {
 		return running;
 	}
 	
-	public Position3 getRelativity(){
-		Position3 rel = new Position3(0,1,0);
+	public Vector3 getRelativity(){
+		Vector3 rel = new Vector3(0,1,0);
 		MaterialData cdata = chest.getData();
 		switch(((org.bukkit.material.Chest) cdata).getFacing()){
 		case NORTH: case EAST:
-			rel.setX(-1);
-			rel.setZ(1);
+			rel = new Vector3(-1,rel.y,1);
 			break;
 		case SOUTH: case WEST:
-			rel.setX(1);
-			rel.setZ(-1);
+			rel = new Vector3(1,rel.y,-1);
 			break;
 		default:
 			break;

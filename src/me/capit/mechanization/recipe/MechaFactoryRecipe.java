@@ -5,8 +5,9 @@ import java.io.Serializable;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.jdom2.Element;
 
+import me.capit.eapi.data.Child;
+import me.capit.eapi.data.DataModel;
 import me.capit.mechanization.Mechanized;
 import me.capit.mechanization.exception.MechaException;
 
@@ -15,23 +16,24 @@ public class MechaFactoryRecipe implements Mechanized, Serializable {
 	private final String name,displayName,description;
 	private int fuel;
 	private RecipeMatrix input,output;
-	private Element keys;
+	private DataModel keys;
 	
-	public MechaFactoryRecipe(Element element) throws MechaException {
-		if (!element.getName().equals("recipe")) throw new MechaException().new InvalidElementException("recipe", element.getName());
-		if (element.getAttribute("name")==null) throw new MechaException().new MechaNameNullException();
-		name = element.getAttributeValue("name");
+	public MechaFactoryRecipe(DataModel recipe) throws MechaException {
+		if (!recipe.getName().equals("recipe")) throw new MechaException().new InvalidElementException("recipe", recipe.getName());
+		if (recipe.getAttribute("name")==null) throw new MechaException().new MechaNameNullException();
+		name = recipe.getAttribute("name").getValueString();
 		try {
-			Element meta = element.getChild("meta");
-			if (meta.getAttribute("display")!=null) displayName = meta.getAttributeValue("display"); else throw null;
-			if (meta.getAttribute("description")!=null) description = meta.getAttributeValue("description"); else throw null;
-			if (meta.getAttribute("fuel_cost")!=null) fuel = Integer.parseInt(meta.getAttributeValue("fuel_cost")); else throw null;
+			DataModel meta = (DataModel) recipe.findFirstChild("meta");
+			displayName = meta.getAttribute("display_name").getValueString();
+			description = meta.getAttribute("description").getValueString();
+			fuel = Integer.parseInt(meta.getAttribute("fuel_cost").getValueString());
 			
-			if (element.getChild("keys")!=null) keys = element.getChild("keys"); else throw null;
+			keys = (DataModel) recipe.findFirstChild("keys");
 			
-			input = new RecipeMatrix(element.getChild("input").getAttributeValue("matrix"));
-			output = new RecipeMatrix(element.getChild("output").getAttributeValue("matrix"));
-		} catch (NullPointerException | IllegalArgumentException e){
+			DataModel shape = (DataModel) recipe.findFirstChild("shape");
+			input = new RecipeMatrix(shape.getAttribute("input").getValueString());
+			output = new RecipeMatrix(shape.getAttribute("output").getValueString());
+		} catch (NullPointerException | IllegalArgumentException | ClassCastException e){
 			e.printStackTrace();
 			throw new MechaException().new MechaAttributeInvalidException("Null or invalid tag/attribute value for "+name+"!");
 		}
@@ -51,7 +53,7 @@ public class MechaFactoryRecipe implements Mechanized, Serializable {
 		return ChatColor.translateAlternateColorCodes('&', description);
 	}
 	
-	public Element getKeys(){
+	public DataModel getKeys(){
 		return keys;
 	}
 	
@@ -60,11 +62,11 @@ public class MechaFactoryRecipe implements Mechanized, Serializable {
 	}
 	
 	public RecipeMatrixKey getKeyByKeyChar(char keyChar){
-		for (Element ke : getKeys().getChildren()){
+		for (Child ke : getKeys().getChildren()){
 			try {
-				RecipeMatrixKey key = new RecipeMatrixKey(ke);
+				RecipeMatrixKey key = new RecipeMatrixKey((DataModel) ke);
 				if (key.getKeyChar()==keyChar) return key;
-			} catch (MechaException e){
+			} catch (MechaException | ClassCastException e){
 				// Do nothing.
 			}
 		}

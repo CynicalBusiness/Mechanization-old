@@ -2,11 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="H:/Dropbox/jars/libs/jdom-2.0.5.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="http://www.jdom.org/docs/apidocs"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="H:/Dropbox/jars/libs/spigot-1.8.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="https://hub.spigotmc.org/javadocs/spigot/"/>
@@ -15,6 +10,11 @@
 	<classpathentry kind="lib" path="H:/Dropbox/jars/libs/EntropyAPI.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://docs.capit.me/eapidocs"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="H:/Dropbox/jars/libs/jdom-2.0.5.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://jdom.org/docs/apidocs/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="bin"/>

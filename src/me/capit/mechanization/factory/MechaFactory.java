@@ -11,11 +11,13 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.jdom2.Element;
 
+import me.capit.eapi.data.DataModel;
+import me.capit.eapi.data.value.StringValue;
+import me.capit.eapi.item.ItemHandler;
+import me.capit.eapi.math.Vector3;
 import me.capit.mechanization.Mechanization;
 import me.capit.mechanization.Mechanized;
-import me.capit.mechanization.Position3;
 import me.capit.mechanization.exception.MechaException;
 import me.capit.mechanization.recipe.RecipeMatrix;
 import me.capit.mechanization.recipe.MechaFactoryRecipe;
@@ -25,35 +27,35 @@ public class MechaFactory implements Mechanized, Serializable {
 	private final String name, displayName, description;
 	private final ChatColor color;
 	private final ItemStack activator;
-	private final int fuelTime,consume,damage;
+	private final int fuelTime,damage;
 	private final boolean captureEvents;
 	private final List<MechaFactoryRecipe> recipes = new ArrayList<MechaFactoryRecipe>();
 	private final FactoryMatrix matrix;
 	
-	public MechaFactory(Element element) throws MechaException {
-		if (!element.getName().equals("factory")) throw new MechaException().new InvalidElementException("factory", element.getName());
-		if (element.getAttribute("name")==null) throw new MechaException().new MechaNameNullException();
-		name = element.getAttributeValue("name");
+	public MechaFactory(DataModel model) throws MechaException {
+		if (!model.getName().equals("factory")) throw new MechaException().new InvalidElementException("factory", model.getName());
+		if (model.getAttribute("name")==null) throw new MechaException().new MechaNameNullException();
+		name = model.getAttribute("name").getValueString();
 		
 		try {
-			Element meta = element.getChild("meta");
-			if (meta.getAttribute("display")!=null) displayName = meta.getAttributeValue("display"); else throw null;
-			if (meta.getAttribute("description")!=null) description = meta.getAttributeValue("description"); else throw null;
-			color = meta.getAttribute("color")!=null ? ChatColor.valueOf(meta.getAttributeValue("color")) : ChatColor.WHITE;
+			DataModel meta = (DataModel) model.findFirstChild("meta");
+			displayName = meta.getAttribute("display").getValueString();
+			description = meta.getAttribute("description").getValueString();
+			color = ChatColor.valueOf(meta.getAttribute("color").getValueString());
 			
-			Element data = element.getChild("data");
-			if (data.getAttribute("fuel_time")!=null) fuelTime = Integer.parseInt(data.getAttributeValue("fuel_time")); else throw null;
-			if (data.getAttribute("activator")==null) throw null;
-				else if (data.getAttributeValue("activator").startsWith("!")) {
-					activator = Mechanization.items.get(data.getAttributeValue("activator").substring(1)).getItemStack();
-				} else {
-					activator = new ItemStack(Material.valueOf(data.getAttributeValue("activator")),1);
-				}
-			damage = data.getAttribute("damage")!=null ? Integer.parseInt(data.getAttributeValue("damage")) : 0;
-			consume = data.getAttribute("consume")!=null ? Integer.parseInt(data.getAttributeValue("consume")) : 0;
-			captureEvents = data.getAttribute("capture_events")!=null ? Boolean.parseBoolean(data.getAttributeValue("capture_events")) : true;
+			DataModel data = (DataModel) model.findFirstChild("data");
+			fuelTime = Integer.parseInt(data.getAttribute("fuel_time").getValueString());
 			
-			Element recs = element.getChild("recipes");
+			int amount = data.hasAttribute("consume") ? Integer.parseInt(data.getAttribute("consume").getValueString()) : 0;
+			int dmg = data.hasAttribute("activator_data") ? Integer.parseInt(data.getAttribute("activator_data").getValueString()) : 0;
+			activator = data.getAttribute("activator").getValueString().startsWith("!")
+					? ItemHandler.getItem(data.getAttribute("activator").getValueString()).getItemStack(amount, dmg)
+					: new ItemStack(Material.valueOf(data.getAttribute("activator").getValueString()), amount, (short) dmg);
+					
+			damage = Integer.parseInt(data.getAttribute("damage").getValueString());
+			captureEvents = Boolean.parseBoolean(data.getAttribute("capture_events").getValueString());
+			
+			StringValue recs = (StringValue) model.findFirstChild("recipes");
 			for (String rec : recs.getValue().trim().split(",")){
 				rec=rec.trim();
 				if (!Mechanization.recipes.containsKey(rec)){
@@ -63,8 +65,8 @@ public class MechaFactory implements Mechanized, Serializable {
 				recipes.add(Mechanization.recipes.get(rec));
 			}
 			
-			matrix = new FactoryMatrix(element.getChild("matrix"));
-		} catch (NullPointerException | IllegalArgumentException e){
+			matrix = new FactoryMatrix((DataModel)  model.findFirstChild("matrix"));
+		} catch (NullPointerException | IllegalArgumentException | ClassCastException e){
 			e.printStackTrace();
 			throw new MechaException().new MechaAttributeInvalidException("Null or invalid tag/attribute value for item "+name+"!");
 		}
@@ -113,11 +115,11 @@ public class MechaFactory implements Mechanized, Serializable {
 	public boolean applyActivatorEffects(ItemStack activator){
 		if ((activator==null && getActivator()!=null) || (activator!=null && getActivator()==null)) return false;
 		if (activator==null && getActivator()==null) return true;
-		if (activator.getAmount()==consume){
+		if (activator.getAmount()==getActivatorConsumption()){
 			activator.setType(Material.AIR);
 			return true;
-		} else if (activator.getAmount()>consume) {
-			activator.setAmount(activator.getAmount()-consume);
+		} else if (activator.getAmount()>getActivatorConsumption()) {
+			activator.setAmount(activator.getAmount()-getActivatorConsumption());
 			activator.setDurability((short) (activator.getDurability() + damage));
 			return true;
 		}
@@ -125,23 +127,23 @@ public class MechaFactory implements Mechanized, Serializable {
 	}
 	
 	@SuppressWarnings("deprecation")
-	public boolean blockMatchesAtLocation(Block b, Position3 pos){
+	public boolean blockMatchesAtLocation(Block b, Vector3 pos){
 		if (matrix.getItemStackAtPosition(pos)==null) return true;
 		if (matrix.getMaterialAtPosition(pos)!=null && b.getType()!=matrix.getMaterialAtPosition(pos)) return false;
 		if (matrix.getDurabilityAtPosition(pos)>-1 && b.getData()!=matrix.getDurabilityAtPosition(pos)) return false;
 		return true;
 	}
 	
-	public boolean validForLocation(Location origin, Position3 relativity){
-		for (int x=0; x<matrix.getDims().getX(); x++){
-			for (int y=0; y<matrix.getDims().getY(); y++){
-				for (int z=0; z<matrix.getDims().getZ(); z++){
-					Position3 pos = new Position3(x,y,z);
-					Position3 relpos = pos.times(relativity);
+	public boolean validForLocation(Location origin, Vector3 relativity){
+		for (int x=0; x<matrix.getDims().x; x++){
+			for (int y=0; y<matrix.getDims().y; y++){
+				for (int z=0; z<matrix.getDims().z; z++){
+					Vector3 pos = new Vector3(x,y,z);
+					Vector3 relpos = pos.multiply(relativity);
 					Block b = origin.getWorld().getBlockAt(
-							origin.getBlockX()+(int) relpos.getX(), 
-							origin.getBlockY()+(int) relpos.getY(), 
-							origin.getBlockZ()+(int) relpos.getZ());
+							origin.getBlockX()+(int) relpos.x, 
+							origin.getBlockY()+(int) relpos.y, 
+							origin.getBlockZ()+(int) relpos.z);
 					if (!blockMatchesAtLocation(b,pos)) return false;
 				}
 			}
@@ -160,7 +162,7 @@ public class MechaFactory implements Mechanized, Serializable {
 		return null;
 	}
 	
-	public List<Position3> getFurnaceLocations(){
+	public List<Vector3> getFurnaceLocations(){
 		return matrix.getLocationsOfMaterial(Material.FURNACE, 0);
 	}
 	
@@ -169,7 +171,7 @@ public class MechaFactory implements Mechanized, Serializable {
 	}
 	
 	public int getActivatorConsumption(){
-		return consume;
+		return activator.getAmount();
 	}
 	
 	public void setInventoryToOutput(Inventory inv, MechaFactoryRecipe recipe){
