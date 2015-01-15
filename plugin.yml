@@ -2,7 +2,7 @@ main: me.capit.mechanization.Mechanization
 version: 1.00R01
 name: Mechanization
 
-depend: ['XMLAPI']
+depend: ['EntropyAPI']
 prefix: MECHA
 author: Wehttam664
 
