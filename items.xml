@@ -4,4 +4,8 @@
         <data-value name="display">&amp;7Factory Wrench</data-value>
         <data-value name="lore">A wrench used to start factories.</data-value>
     </item>
+    <item name="steel_pickaxe" material="IRON_PICKAXE">
+        <data-value name="display">&amp;7Steel Pickaxe</data-value>
+        <data-value name="lore">A steel Pickaxe</data-value>
+    </item>
 </items>
