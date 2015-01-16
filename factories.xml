@@ -418,10 +418,31 @@
 					<matrixX material="NETHER_BRICK"/>
 				</matrixZ>
 				<matrixZ>
+					<matrixX material="GLASS"/>
+					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
 					<matrixX material="NETHER_BRICK"/>
+				</matrixZ>
+				<matrixZ>
+					<matrixX material="GLASS"/>
 					<matrixX material="AIR"/>
 					<matrixX material="AIR"/>
 					<matrixX material="AIR"/>
+					<matrixX material="NETHER_BRICK"/>
+				</matrixZ>
+				<matrixZ>
+					<matrixX material="GLASS"/>
+					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
+					<matrixX material="NETHER_BRICK"/>
+				</matrixZ>
+				<matrixZ>
+					<matrixX material="NETHER_BRICK"/>
+					<matrixX material="NETHER_BRICK"/>
+					<matrixX material="NETHER_BRICK"/>
+					<matrixX material="NETHER_BRICK"/>
 					<matrixX material="NETHER_BRICK"/>
 				</matrixZ>
 			</matrixY>
