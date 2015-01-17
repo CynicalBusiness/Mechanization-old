@@ -371,12 +371,12 @@
 		<meta display="Gem Smelter" color="AQUA" description="Smelts Gem Ores."/>
 		<data fuel_time="8" activator="!factory_wrench" comsume="0" damage="2" capture_events="true"/>
 		<data-value name="recipes">glowstone,diamond_ore,lapiz_ore,emerald_ore</data-value>
-		<matrix width="5" height="3" depth="5" chestX="2" chestY="0" chestZ="0">
+		<matrix width="5" height="3" depth="5" chestX="0" chestY="0" chestZ="0">
 			<matrixY>
 				<matrixZ>
-					<matrixX material="NETHER_BRICK"/>
-					<matrixX material="NETHER_FENCE"/>
 					<matrixX material="CHEST"/>
+					<matrixX material="NETHER_FENCE"/>
+					<matrixX material="NETHER_BRICK"/>
 					<matrixX material="NETHER_FENCE"/>
 					<matrixX material="NETHER_BRICK"/>
 				</matrixZ>
@@ -411,31 +411,31 @@
 			</matrixY>
 			<matrixY>
 				<matrixZ>
-					<matrixX material="NETHER_BRICK"/>
+					<matrixX/>
 					<matrixX material="FURNACE"/>
 					<matrixX material="FURNACE"/>
 					<matrixX material="FURNACE"/>
 					<matrixX material="NETHER_BRICK"/>
 				</matrixZ>
 				<matrixZ>
-					<matrixX material="GLASS"/>
-					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
+					<matrixX material="STAINED_GLASS"/>
+					<matrixX/>
+					<matrixX/>
+					<matrixX/>
 					<matrixX material="NETHER_BRICK"/>
 				</matrixZ>
 				<matrixZ>
-					<matrixX material="GLASS"/>
-					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
+					<matrixX material="STAINED_GLASS"/>
+					<matrixX/>
+					<matrixX/>
+					<matrixX/>
 					<matrixX material="NETHER_BRICK"/>
 				</matrixZ>
 				<matrixZ>
-					<matrixX material="GLASS"/>
-					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
+					<matrixX material="STAINED_GLASS"/>
+					<matrixX/>
+					<matrixX/>
+					<matrixX/>
 					<matrixX material="NETHER_BRICK"/>
 				</matrixZ>
 				<matrixZ>
@@ -443,6 +443,43 @@
 					<matrixX material="NETHER_BRICK"/>
 					<matrixX material="NETHER_BRICK"/>
 					<matrixX material="NETHER_BRICK"/>
+					<matrixX material="NETHER_BRICK"/>
+				</matrixZ>
+			</matrixY>
+			<matrixY>
+				<matrixZ>
+					<matrixX material="NETHER_BRICK"/>
+					<matrixX material="NETHER_FENCE"/>
+					<matrixX material="NETHER_FENCE"/>
+					<matrixX material="NETHER_FENCE"/>
+					<matrixX material="NETHER_BRICK"/>
+				</matrixZ>
+				<matrixZ>
+					<matrixX material="NETHER_FENCE"/>
+					<matrixX material="LAVA"/>
+					<matrixX material="LAVA"/>
+					<matrixX material="LAVA"/>
+					<matrixX material="NETHER_FENCE"/>
+				</matrixZ>
+				<matrixZ>
+					<matrixX material="NETHER_FENCE"/>
+					<matrixX material="LAVA"/>
+					<matrixX material="LAVA"/>
+					<matrixX material="LAVA"/>
+					<matrixX material="NETHER_FENCE"/>
+				</matrixZ>
+				<matrixZ>
+					<matrixX material="NETHER_FENCE"/>
+					<matrixX material="LAVA"/>
+					<matrixX material="LAVA"/>
+					<matrixX material="LAVA"/>
+					<matrixX material="NETHER_FENCE"/>
+				</matrixZ>
+				<matrixZ>
+					<matrixX material="NETHER_BRICK"/>
+					<matrixX material="NETHER_FENCE"/>
+					<matrixX material="NETHER_FENCE"/>
+					<matrixX material="NETHER_FENCE"/>
 					<matrixX material="NETHER_BRICK"/>
 				</matrixZ>
 			</matrixY>
