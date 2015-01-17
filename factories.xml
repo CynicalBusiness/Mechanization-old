@@ -1,48 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- For information on configuring factories, see https://github.com/Wehttam664/Mechanization/wiki/Configuration -->
 <factories>
     <factory name="foundry">
-	    <meta display="Foundry" color="GRAY" description="A basic metals factory."/>
-	    	<!-- Do not include colors in the diplay name!
-	    		 Colors should be of https://hub.spigotmc.org/javadocs/spigot/org/bukkit/ChatColor.html -->
-	    <data fuel_time="4" activator="IRON_PICKAXE" consume="0" damage="1" capture_events="true"/>
-	    	<!-- Activators can use custom items: simply preceede the name with '!'. -->
-	    <data-value name="recipes">steel,iron,gold,factory_wrench</data-value>
+	    <meta display="&amp;7Foundry" description="A basic metals factory."/>
+	    <data fuel_time="4" activator="IRON_PICKAXE" consume="0" damage="1" recipes="steel,iron,gold,factory_wrench"/>
 	    <matrix width="5" height="3" depth="2" chestX="2" chestY="0" chestZ="0">
-	        <!-- Width, height, and depth are X, Y, and Z respectively. 0,0,0 is the lower-left corner closest to the front. -->
-	        <!-- You must have the correct number of matrix axies per these values. -->
-	        <!-- Names in the matrix MUST match those at https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html -->
 	        <matrixY>
 	            <matrixZ>
-	                <!-- If 'material' or 'data' is not defined, the space may have any material/data respectively. -->
-	                <!-- Some aliasing occurs. LOG_2 will work for LOG, BURNING_FURNACE will work for FURNACE, etc. -->
-	                <matrixX material="COBBLE_WALL" data="0"/>
+	                <matrixX material="COBBLE_WALL:0"/>
 	                <matrixX material="ANVIL"/>
-	                <matrixX material="CHEST"/><!-- Because this is 2,0,0 in the matrix, this must be a chest, as defined above. -->
+	                <matrixX material="CHEST"/>
 	                <matrixX material="ANVIL"/>
-	                <matrixX material="COBBLE_WALL" data="0"/>
+	                <matrixX material="COBBLE_WALL:0"/>
 	            </matrixZ>
 	            <matrixZ>
-	                <matrixX material="LOG"/>
+	                <matrixX material="LOG|LOG_2"/>
 	                <matrixX material="FURNACE"/>
 	                <matrixX material="REDSTONE_BLOCK"/>
 	                <matrixX material="FURNACE"/>
-	                <matrixX material="LOG"/>
+	                <matrixX material="LOG|LOG_2"/>
 	            </matrixZ>
 	        </matrixY>
 	        <matrixY>
 	            <matrixZ>
-	                <matrixX material="COBBLE_WALL" data="0"/>
+	                <matrixX material="COBBLE_WALL:2"/>
 	                <matrixX material="FENCE"/>
-	                <matrixX/><!-- This is a wildcard matrixX. ANY BLOCK may be placed at this location! -->
+	                <matrixX/>
 	                <matrixX material="FENCE"/>
-	                <matrixX material="COBBLE_WALL" data="0"/>
+	                <matrixX material="COBBLE_WALL:2"/>
 	            </matrixZ>
 	            <matrixZ>
-	                <matrixX material="LOG"/>
+	                <matrixX material="LOG|LOG_2"/>
 	                <matrixX material="GOLD_BLOCK"/>
 	                <matrixX material="IRON_BLOCK"/>
 	                <matrixX material="GOLD_BLOCK"/>
-	                <matrixX material="LOG"/>
+	                <matrixX material="LOG|LOG_2"/>
 	            </matrixZ>
 	        </matrixY>
 	        <matrixY>
@@ -55,129 +47,77 @@
 	            </matrixZ>
 	            <!--Layerend-->
 	            <matrixZ>
-	                <matrixX material="LOG"/>
+	                <matrixX material="LOG|LOG_2"/>
 	                <matrixX material="FURNACE"/>
 	                <matrixX material="OBSIDIAN"/>
 	                <matrixX material="FURNACE"/>
-	                <matrixX material="LOG"/>
+	                <matrixX material="LOG|LOG_2"/>
 	            </matrixZ>
 	        </matrixY>
 	    </matrix>
 	</factory>
-	<factory name="Saw Mill">
+	<factory name="saw_mill">
 		<meta display="Saw Mill" color="GRAY" description="A basic Saw Mill."/>
-		<data fuel_time="4" activator="!factory_wrench" consume="0" damage="1" capture_events="true"/>
-		<data-value name="recipes">dark_oak_planks, oak_planks, spruce_planks, birch_planks, jungle_planks</data-value>
+		<data fuel_time="4" activator="!factory_wrench" consume="0" damage="1" recipes="dark_oak_planks,oak_planks,spruce_planks,birch_planks,jungle_planks"/>
 		<matrix width="5" height="5" depth="7" chestX="2" chestY="0" chestZ="0">
 			<matrixY>
 				<matrixZ>
-					<matrixX material="WOOD_PLANK"/>
+					<matrixX material="WOOD"/>
 					<matrixX material="FURNACE"/>
 					<matrixX material="CHEST"/>
 					<matrixX material="FURNACE"/>
-					<matrixX material="WOOD_PLANK"/>
+					<matrixX material="WOOD"/>
 				</matrixZ>
 				<matrixZ>
-					<matrixX material="WOOD_PLANK"/>
-					<matrixX material="WOOD_PLANK"/>
+					<matrixX material="WOOD"/>
+					<matrixX material="WOOD"/>
 					<matrixX material="OBSIDIAN"/>
-					<matrixX material="WOOD_PLANK"/>
-					<matrixX material="WOOD_PLANK"/>
+					<matrixX material="WOOD"/>
+					<matrixX material="WOOD"/>
 				</matrixZ>
 				<matrixZ>
-					<matrixX material="WOOD_PLANK"/>
-					<matrixX material="WOOD_PLANK"/>
+					<matrixX material="WOOD"/>
+					<matrixX material="WOOD"/>
+					<matrixX material="IRON"/>
+					<matrixX material="WOOD"/>
+					<matrixX material="WOOD"/>
+				</matrixZ>
+				<matrixZ>
+					<matrixX material="WOOD"/>
+					<matrixX material="WOOD"/>
+					<matrixX material="IRON"/>
+					<matrixX material="WOOD"/>
+					<matrixX material="WOOD"/>
+				</matrixZ>
+				<matrixZ>
+					<matrixX material="WOODK"/>
+					<matrixX material="WOOD"/>
 					<matrixX material="IRON_BLOCK"/>
-					<matrixX material="WOOD_PLANK"/>
-					<matrixX material="WOOD_PLANK"/>
+					<matrixX material="WOOD"/>
+					<matrixX material="WOOD"/>
 				</matrixZ>
 				<matrixZ>
-					<matrixX material="WOOD_PLANK"/>
-					<matrixX material="WOOD_PLANK"/>
-					<matrixX material="IRON_BLOCK"/>
-					<matrixX material="WOOD_PLANK"/>
-					<matrixX material="WOOD_PLANK"/>
-				</matrixZ>
-				<matrixZ>
-					<matrixX material="WOOD_PLANK"/>
-					<matrixX material="WOOD_PLANK"/>
-					<matrixX material="IRON_BLOCK"/>
-					<matrixX material="WOOD_PLANK"/>
-					<matrixX material="WOOD_PLANK"/>
-				</matrixZ>
-				<matrixZ>
-					<matrixX material="WOOD_PLANK"/>
-					<matrixX material="WOOD_PLANK"/>
+					<matrixX material="WOOD"/>
+					<matrixX material="WOOD"/>
 					<matrixX material="OBSIDIAN"/>
-					<matrixX material="WOOD_PLANK"/>
-					<matrixX material="WOOD_PLANK"/>
+					<matrixX material="WOOD"/>
+					<matrixX material="WOOD"/>
 				</matrixZ>
 				<matrixZ>
-					<matrixX material="WOOD_PLANK"/>
-					<matrixX material="WOOD_PLANK"/>
-					<matrixX material="WOOD_PLANK"/>
-					<matrixX material="WOOD_PLANK"/>
-					<matrixX material="WOOD_PLANK"/>
-				</matrixZ>
-			</matrixY>
-			<matrixY>
-				<matrixZ>
-					<matrixX material="FENCE_POST"/>
-					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
-					<matrixX material="FENCE_POST"/>
-				</matrixZ>
-				<matrixZ>
-					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
-				</matrixZ>
-				<matrixZ>
-					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
-					<matrixX material="QUARTZ_SLAB"/>
-					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
-				</matrixZ>
-				<matrixZ>
-					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
-					<matrixX material="QUARTZ_SLAB"/>
-					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
-				</matrixZ>
-				<matrixZ>
-					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
-					<matrixX material="QUARTZ_SLAB"/>
-					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
-				</matrixZ>
-				<matrixZ>
-					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
-				</matrixZ>
-				<matrixZ>
-					<matrixX material="FENCE_POST"/>
-					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
-					<matrixX material="FENCE_POST"/>
+					<matrixX material="WOOD"/>
+					<matrixX material="WOOD"/>
+					<matrixX material="WOOD"/>
+					<matrixX material="WOOD"/>
+					<matrixX material="WOOD"/>
 				</matrixZ>
 			</matrixY>
 			<matrixY>
 				<matrixZ>
-					<matrixX material="FENCE_POST"/>
+					<matrixX material="FENCE|BIRCH_FENCE|SPRUCE_FENCE|JUNGLE_FENCE|DARK_OAK_FENCE|ACACIA_FENCE"/>
 					<matrixX material="AIR"/>
 					<matrixX material="AIR"/>
 					<matrixX material="AIR"/>
-					<matrixX material="FENCE_POST"/>
+					<matrixX material="FENCE|BIRCH_FENCE|SPRUCE_FENCE|JUNGLE_FENCE|DARK_OAK_FENCE|ACACIA_FENCE"/>
 				</matrixZ>
 				<matrixZ>
 					<matrixX material="AIR"/>
@@ -189,7 +129,21 @@
 				<matrixZ>
 					<matrixX material="AIR"/>
 					<matrixX material="AIR"/>
+					<matrixX material="STEP:7"/>
 					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
+				</matrixZ>
+				<matrixZ>
+					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
+					<matrixX material="STEP:7"/>
+					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
+				</matrixZ>
+				<matrixZ>
+					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
+					<matrixX material="STEP:7"/>
 					<matrixX material="AIR"/>
 					<matrixX material="AIR"/>
 				</matrixZ>
@@ -201,76 +155,113 @@
 					<matrixX material="AIR"/>
 				</matrixZ>
 				<matrixZ>
+					<matrixX material="FENCE|BIRCH_FENCE|SPRUCE_FENCE|JUNGLE_FENCE|DARK_OAK_FENCE|ACACIA_FENCE"/>
 					<matrixX material="AIR"/>
 					<matrixX material="AIR"/>
 					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
-				</matrixZ>
-				<matrixZ>
-					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
-				</matrixZ>
-				<matrixZ>
-					<matrixX material="FENCE_POST"/>
-					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
-					<matrixX material="AIR"/>
-					<matrixX material="FENCE_POST"/>
+					<matrixX material="FENCE|BIRCH_FENCE|SPRUCE_FENCE|JUNGLE_FENCE|DARK_OAK_FENCE|ACACIA_FENCE"/>
 				</matrixZ>
 			</matrixY>
 			<matrixY>
 				<matrixZ>
-					<matrixX material="WOOD_STAIR"/>
-					<matrixX material="WOOD_STAIR"/>
-					<matrixX material="WOOD_STAIR"/>
-					<matrixX material="WOOD_STAIR"/>
-					<matrixX material="WOOD_STAIR"/>
+					<matrixX material="FENCE|BIRCH_FENCE|SPRUCE_FENCE|JUNGLE_FENCE|DARK_OAK_FENCE|ACACIA_FENCE"/>
+					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
+					<matrixX material="FENCE|BIRCH_FENCE|SPRUCE_FENCE|JUNGLE_FENCE|DARK_OAK_FENCE|ACACIA_FENCE"/>
 				</matrixZ>
 				<matrixZ>
-					<matrixX material="WOOD_STAIR"/>
-					<matrixX material="WOOD_PLANK"/>
-					<matrixX material="WOOD_PLANK"/>
-					<matrixX material="WOOD_PLANK"/>
-					<matrixX material="WOOD_STAIR"/>
+					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
 				</matrixZ>
 				<matrixZ>
-					<matrixX material="WOOD_STAIR"/>
-					<matrixX material="WOOD_PLANK"/>
-					<matrixX material="WOOD_PLANK"/>
-					<matrixX material="WOOD_PLANK"/>
-					<matrixX material="WOOD_STAIR"/>
+					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
 				</matrixZ>
 				<matrixZ>
-					<matrixX material="WOOD_STAIR"/>
-					<matrixX material="WOOD_PLANK"/>
-					<matrixX material="WOOD_PLANK"/>
-					<matrixX material="WOOD_PLANK"/>
-					<matrixX material="WOOD_STAIR"/>
+					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
 				</matrixZ>
 				<matrixZ>
-					<matrixX material="WOOD_STAIR"/>
-					<matrixX material="WOOD_PLANK"/>
-					<matrixX material="WOOD_PLANK"/>
-					<matrixX material="WOOD_PLANK"/>
-					<matrixX material="WOOD_STAIR"/>
+					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
 				</matrixZ>
 				<matrixZ>
-					<matrixX material="WOOD_STAIR"/>
-					<matrixX material="WOOD_PLANK"/>
-					<matrixX material="WOOD_PLANK"/>
-					<matrixX material="WOOD_PLANK"/>
-					<matrixX material="WOOD_STAIR"/>
+					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
 				</matrixZ>
 				<matrixZ>
-					<matrixX material="WOOD_STAIR"/>
-					<matrixX material="WOOD_STAIR"/>
-					<matrixX material="WOOD_STAIR"/>
-					<matrixX material="WOOD_STAIR"/>
-					<matrixX material="WOOD_STAIR"/>
+					<matrixX material="FENCE|BIRCH_FENCE|SPRUCE_FENCE|JUNGLE_FENCE|DARK_OAK_FENCE|ACACIA_FENCE"/>
+					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
+					<matrixX material="AIR"/>
+					<matrixX material="FENCE|BIRCH_FENCE|SPRUCE_FENCE|JUNGLE_FENCE|DARK_OAK_FENCE|ACACIA_FENCE"/>
+				</matrixZ>
+			</matrixY>
+			<matrixY>
+				<matrixZ>
+					<matrixX material="WOOD_STAIRS"/>
+					<matrixX material="WOOD_STAIRS"/>
+					<matrixX material="WOOD_STAIRS"/>
+					<matrixX material="WOOD_STAIRS"/>
+					<matrixX material="WOOD_STAIRS"/>
+				</matrixZ>
+				<matrixZ>
+					<matrixX material="WOOD_STAIRS"/>
+					<matrixX material="WOOD"/>
+					<matrixX material="WOOD"/>
+					<matrixX material="WOOD"/>
+					<matrixX material="WOOD_STAIRS"/>
+				</matrixZ>
+				<matrixZ>
+					<matrixX material="WOOD_STAIRS"/>
+					<matrixX material="WOOD"/>
+					<matrixX material="WOOD"/>
+					<matrixX material="WOOD"/>
+					<matrixX material="WOOD_STAIRS"/>
+				</matrixZ>
+				<matrixZ>
+					<matrixX material="WOOD_STAIRS"/>
+					<matrixX material="WOOD"/>
+					<matrixX material="WOOD"/>
+					<matrixX material="WOOD"/>
+					<matrixX material="WOOD_STAIRS"/>
+				</matrixZ>
+				<matrixZ>
+					<matrixX material="WOOD_STAIRS"/>
+					<matrixX material="WOOD"/>
+					<matrixX material="WOOD"/>
+					<matrixX material="WOOD"/>
+					<matrixX material="WOOD_STAIRS"/>
+				</matrixZ>
+				<matrixZ>
+					<matrixX material="WOOD_STAIRS"/>
+					<matrixX material="WOOD"/>
+					<matrixX material="WOOD"/>
+					<matrixX material="WOOD"/>
+					<matrixX material="WOOD_STAIRS"/>
+				</matrixZ>
+				<matrixZ>
+					<matrixX material="WOOD_STAIRS"/>
+					<matrixX material="WOOD_STAIRS"/>
+					<matrixX material="WOOD_STAIRS"/>
+					<matrixX material="WOOD_STAIRS"/>
+					<matrixX material="WOOD_STAIRS"/>
 				</matrixZ>
 			</matrixY>
 		</matrix>
@@ -334,17 +325,17 @@
 	        <matrixY>
 	            <matrixZ>
 	                <matrixX material="AIR"/>
-	                <matrixX material="SLAB2"/>
+	                <matrixX material="STEP:5"/>
 	                <matrixX material="AIR"/>
 	            </matrixZ>
 	            <matrixZ>
-	                <matrixX material="AIR"/>
+	                <matrixX material="STEP:5"/>
 	                <matrixX material="STONE_BRICK"/>
-	                <matrixX material="AIR"/>
+	                <matrixX material="STEP:5"/>
 	            </matrixZ>
 	            <matrixZ>
 	                <matrixX material="AIR"/>
-	                <matrixX material="SLAB2"/>
+	                <matrixX material="STEP:5"/>
 	                <matrixX material="AIR"/>
 	            </matrixZ>
 	        </matrixY>

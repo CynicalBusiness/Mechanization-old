@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <recipes>
     <recipe name="steel">
-        <meta display="&amp;8Steel &amp;7Smelting" description="Smelts steel from iron and coal." fuel_cost="16"/>
-        <shape input=" C  C  C , CIICIIC , C SCS C " output="         ,  ss ss  ,   c c   "/>
+        <meta display="&amp;8Steel &amp;7Smelting" description="Smelts steel from iron and coal."/>
+        <shape input=" C  C  C , CIICIIC , C SCS C " output="         ,  ss ss  ,   c c   " fuel_cost="16"/>
         <keys>
             <!-- Like the factory matrix, any non-specified material/data will match any material/data respectively. -->
             <!-- Precede materials with an '!' to use custom items defined in the items.xml file. -->
             <!-- A comma (,) cannot be used as a key as it is a row separator. In addition, any undefined tags are treated as AIR. -->
             <key char="C" material="COAL" amount="8"/>
             <key char="I" material="IRON_INGOT" amount="16"/>
-            <key char="S" material="STONE" amount="16"/>
+            <key char="S" material="STONE:0" amount="16"/>
             <key char="s" material="!steel" amount="8"/>
-            <key char="c" material="COBBLESTONE" amount="16"/>
+            <key char="c" material="COBBLESTONE|GRAVEL" amount="16"/>
         </keys>
     </recipe>
     <recipe name="iron">
-        <meta display="&amp;7Iron Smelting" description="A more efficient way of refining iron." fuel_cost="4"/>
-        <shape input=" C  C  C ,sississis, s  s  s " output="         ,gIggcggIg, c  c  c "/>
+        <meta display="&amp;7Iron Smelting" description="A more efficient way of refining iron."/>
+        <shape input=" C  C  C ,sississis, s  s  s " output="         ,gIggcggIg, c  c  c " fuel_cost="4"/>
         <keys>
             <key char="C" material="COAL" amount="4"/>
             <key char="i" material="IRON_ORE" amount="16"/>
@@ -27,8 +27,8 @@
         </keys>
     </recipe>
     <recipe name="gold">
-        <meta display="&amp;eGold &amp;7Smelting" description="A more efficient way of refining gold." fuel_cost="8"/>
-        <shape input=" C  C  C ,sississis, s  s  s " output="         ,gIggcggIg, c  c  c "/>
+        <meta display="&amp;eGold &amp;7Smelting" description="A more efficient way of refining gold."/>
+        <shape input=" C  C  C ,sississis, s  s  s " output="         ,gIggcggIg, c  c  c " fuel_cost="8"/>
         <keys>
             <key char="C" material="COAL" amount="4"/>
             <key char="i" material="GOLD_ORE" amount="8"/>
@@ -39,8 +39,8 @@
         </keys>
     </recipe>
     <recipe name="factory_wrench">
-        <meta display="&amp;7Wrench &amp;fProduction" description="Makes two factory wrenches." fuel_cost="16"/>
-        <shape input="   I I   ,ssOIDIOss,   I I   " output="         ,   W W   ,         "/>
+        <meta display="&amp;7Wrench &amp;fProduction" description="Makes two factory wrenches."/>
+        <shape input="   I I   ,ssOIDIOss,   I I   " output="         ,   W W   ,         " fuel_cost="16"/>
         <keys>
             <key char="I" material="IRON_INGOT" amount="2"/>
             <key char="s" material="STICK" amount="2"/>
@@ -50,8 +50,8 @@
         </keys>
     </recipe>
     <recipe name="glowstone">
-        <meta display="&amp;6Glowstone Production" description="Makes more glowstone than usual." fuel_cost="16"/>
-        <shape input="ggrggrggr,tggtggtgg,ggrggrggr" output="G  G  G  , G  G  G ,  G  G  G"/>
+        <meta display="&amp;6Glowstone Production" description="Makes more glowstone than usual."/>
+        <shape input="ggrggrggr,tggtggtgg,ggrggrggr" output="G  G  G  , G  G  G ,  G  G  G" fuel_cost="16"/>
         <keys>
             <key char="g" material="GOWSTONE_DUST" amount="1"/>
             <key char="r" material="REDSTONE_DUST" amount="2"/>
