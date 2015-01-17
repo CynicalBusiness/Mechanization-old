@@ -49,4 +49,14 @@
             <key char="W" material="!factory_wrench" amount="1"/>
         </keys>
     </recipe>
+    <recipe name="glowstone">
+        <meta display="&amp;6Glowstone Production" description="Makes more glowstone than usual." fuel_cost="16"/>
+        <shape input="ggrggrggr,tggtggtgg,ggrggrggr" output="G  G  G  , G  G  G ,  G  G  G"/>
+        <keys>
+            <key char="g" material="GOWSTONE_DUST" amount="1"/>
+            <key char="r" material="REDSTONE_DUST" amount="2"/>
+            <key char="t" material="TORCH" amount="1"/>
+            <key char="G" material="GLOWSTONE" amount="1"/>
+         </keys>
+    </recipe>
 </recipes>
