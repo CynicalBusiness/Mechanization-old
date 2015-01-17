@@ -370,7 +370,7 @@
 	<factory>
 		<meta display="Gem Smelter" color="AQUA" description="Smelts Gem Ores."/>
 		<data fuel_time="8" activator="!factory_wrench" comsume="0" damage="2" capture_events="true"/>
-		<data-value name="recipes">glowstone,diamond_ore,lapiz_ore,emerald_ore</data-value>
+		<data-value name="recipes">glowstone,diamond_ore,lapis_ore,emerald_ore</data-value>
 		<matrix width="5" height="3" depth="5" chestX="0" chestY="0" chestZ="0">
 			<matrixY>
 				<matrixZ>
