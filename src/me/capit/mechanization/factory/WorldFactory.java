@@ -56,19 +56,16 @@ public class WorldFactory {
 		return null;
 	}
 	
-	public WorldFactory(String factory, ItemStack activator, Chest chest) throws MechaException {
+	public WorldFactory(String factory, ItemStack activator, Chest chest) throws MechaException, IllegalArgumentException {
 		MechaFactory fac = Mechanization.factories.get(factory);
-		try {
-			if (!fac.validActivator(activator)) throw null;
-			this.factory = fac;
-			this.chest = chest;
-			origin = new Vector3(chest.getX(),chest.getY(),chest.getZ())
-				.subtract(fac.getMatrix().getChestLocation().multiply(getRelativity()));
-			world = chest.getWorld();
-			if (!valid()) throw null;
-		} catch (NullPointerException e){
-			throw new MechaException(e.getMessage());
-		}
+		if (fac==null) throw new IllegalArgumentException("Could not find loaded factory '"+factory+"'!");
+		if (!fac.validActivator(activator)) throw new MechaException(fac, "Invalid activator.");
+		this.factory = fac;
+		this.chest = chest;
+		origin = new Vector3(chest.getX(),chest.getY(),chest.getZ())
+		.subtract(fac.getMatrix().getChestLocation().multiply(getRelativity()));
+		world = chest.getWorld();
+		if (!valid()) throw new MechaException(fac, "Not valid for location.");
 	}
 
 	public void activate(){
@@ -89,10 +86,10 @@ public class WorldFactory {
 								fuelIS.setType(Material.AIR);
 							}
 							f.getInventory().setFuel(fuelIS);
-							f.setBurnTime((short) (factory.getTimePerFuel()*20));
+							f.setBurnTime((short) (factory.getData().getFuelTime()*20));
 							f.update();
 						}
-						TimeUnit.SECONDS.sleep(factory.getTimePerFuel());
+						TimeUnit.SECONDS.sleep(factory.getData().getFuelTime());
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 						break;

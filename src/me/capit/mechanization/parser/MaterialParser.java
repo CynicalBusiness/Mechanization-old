@@ -37,6 +37,10 @@ public class MaterialParser {
 		}
 	}
 	
+	public boolean isWildcard(){
+		return wildcard;
+	}
+	
 	public int size(){
 		return mats.length;
 	}

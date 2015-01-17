@@ -23,10 +23,11 @@ public class FactoryDataParser {
 		act_damage = data.hasAttribute("damage") ? getInt(data.getAttribute("damage").getValueString()) : 0;
 		
 		activator = new MaterialParser(data.hasAttribute("activator") ? data.getAttribute("activator").getValueString() : null);
+		if (activator.isWildcard()) Mechanization.warn("Factory "+factory.getName()+" has a wildcard activator. Is the material valid?");
 		
 		recipes = data.hasAttribute("recipes") ? data.getAttribute("recipes").getValueString().split("\\,") : new String[0];
 		for (int i=0; i<recipes.length; i++) recipes[i] = recipes[i].trim();
-		if (recipes.length==0) Mechanization.warn(factory.getName()+" has no registered recipes. Is the element invalid?");
+		if (recipes.length==0) Mechanization.warn("Factory "+factory.getName()+" has no registered recipes. Is the string valid?");
 	}
 	
 	private int getInt(String dataval){
