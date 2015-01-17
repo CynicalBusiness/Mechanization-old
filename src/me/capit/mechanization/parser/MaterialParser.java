@@ -52,10 +52,10 @@ public class MaterialParser {
 		for (int i=0; i<mats.length; i++){
 			if (mats[i].startsWith("!")){
 				GameItem item = ItemHandler.getItem(mats[i]);
-				stacks[i] = item!=null ? item.getItemStack(amounts[i], dmgs[i]) : null;
+				stacks[i] = item!=null ? item.getItemStack(amounts[i], dmgs[i]>=0 ? dmgs[i] : 0) : null;
 			} else {
 				try {
-					stacks[i] = new ItemStack(Material.valueOf(mats[i]), amounts[i], dmgs[i]);
+					stacks[i] = new ItemStack(Material.valueOf(mats[i]), amounts[i], dmgs[i]>=0 ? dmgs[i] : 0);
 				} catch (IllegalArgumentException e){
 					stacks[i] = null;
 				}
@@ -86,8 +86,16 @@ public class MaterialParser {
 		return mats;
 	}
 	
+	public boolean hasMaterial(Material mat){
+		for (Material m : getMaterials()){
+			if (m==mat) return true;
+		}
+		return false;
+	}
+	
 	public boolean isInput(ItemStack stack, boolean ignoreAmount){
 		if (wildcard) return true;
+		if (stack==null) return hasMaterial(Material.AIR);
 		ItemStack[] stacks = ignoreAmount ? getStacks() : getStacks(stack.getAmount());
 		for (int i=0; i<stacks.length; i++){
 			if (ItemHandler.stackEquals(stacks[i], stack, ignoreAmount, dmgs[i]<0)) return true;
