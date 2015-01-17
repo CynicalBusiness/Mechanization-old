@@ -1,5 +1,5 @@
 main: me.capit.mechanization.Mechanization
-version: 1.00R01
+version: 1.02.00
 name: Mechanization
 
 depend: ['EntropyAPI']
