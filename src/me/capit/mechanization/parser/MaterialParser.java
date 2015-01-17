@@ -10,20 +10,29 @@ import org.bukkit.inventory.ItemStack;
 
 public class MaterialParser {
 	
+	private boolean wildcard;
+	
 	private String[] mats;
 	private short[] dmgs;
 	
 	public MaterialParser(String attr){
-		String[] raw = attr.split("\\|");
-		mats = new String[raw.length];
-		dmgs = new short[raw.length];
-		for (int i=0; i<raw.length; i++){
-			String[] data = raw[i].split("\\:");
-			mats[i] = data[0];
-			try {
-				dmgs[i] = data.length>1 ? Short.parseShort(data[1]) : -1;
-			} catch (NumberFormatException e){
-				dmgs[i] = -1;
+		if (attr==null || attr==""){
+			wildcard = true;
+			mats = new String[0];
+			dmgs = new short[0];
+		} else {
+			wildcard = false;
+			String[] raw = attr.split("\\|");
+			mats = new String[raw.length];
+			dmgs = new short[raw.length];
+			for (int i=0; i<raw.length; i++){
+				String[] data = raw[i].split("\\:");
+				mats[i] = data[0];
+				try {
+					dmgs[i] = data.length>1 ? Short.parseShort(data[1]) : -1;
+				} catch (NumberFormatException e){
+					dmgs[i] = -1;
+				}
 			}
 		}
 	}
@@ -37,6 +46,7 @@ public class MaterialParser {
 	}
 	
 	public ItemStack[] getStacks(int[] amounts) throws IllegalArgumentException {
+		if (wildcard) return new ItemStack[0];
 		if (amounts.length!=size()) throw new IllegalArgumentException("Amounts array be if length "+size()+"!");
 		ItemStack[] stacks = new ItemStack[size()];
 		for (int i=0; i<mats.length; i++){
@@ -67,6 +77,7 @@ public class MaterialParser {
 	}
 	
 	public Material[] getMaterials(){
+		if (wildcard) return new Material[0];
 		ItemStack[] stacks = getStacks();
 		Material[] mats = new Material[stacks.length];
 		for (int i=0; i<stacks.length; i++){
@@ -75,7 +86,8 @@ public class MaterialParser {
 		return mats;
 	}
 	
-	public boolean inputValid(ItemStack stack, boolean ignoreAmount){
+	public boolean isInput(ItemStack stack, boolean ignoreAmount){
+		if (wildcard) return true;
 		ItemStack[] stacks = ignoreAmount ? getStacks() : getStacks(stack.getAmount());
 		for (int i=0; i<stacks.length; i++){
 			if (ItemHandler.stackEquals(stacks[i], stack, ignoreAmount, dmgs[i]<0)) return true;
@@ -84,6 +96,7 @@ public class MaterialParser {
 	}
 	
 	public ItemStack getOutput(int amount){
+		if (wildcard) return null;
 		ItemStack[] stacks = getStacks(amount);
 		Random rand = new Random();
 		return stacks[rand.nextInt(stacks.length)];
