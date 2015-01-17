@@ -34,9 +34,9 @@ public class MechaDataController implements Listener, CommandExecutor {
 			WorldFactory wf = WorldFactory.getFactoryAtChest(e.getItem(), chest);
 			if (wf!=null && wf.valid() && wf.getInputRecipe()!=null && !wf.isRunning()
 					&& wf.validFurnacesForRecipe(wf.getInputRecipe()) && wf.getFactory().applyActivatorEffects(e.getItem())){
-				e.getPlayer().sendMessage(wf.getFactory().getColor()+wf.getFactory().getDisplayName()+ChatColor.GREEN+" started!");
+				e.getPlayer().sendMessage(wf.getFactory().getDisplayName()+ChatColor.GREEN+" started!");
 				wf.activate();
-				if (wf.getFactory().doesCaptureEvents()) e.setCancelled(true);
+				e.setCancelled(true);
 			}
 		}
 	}

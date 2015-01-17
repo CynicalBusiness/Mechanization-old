@@ -56,10 +56,6 @@ public class MechaFactory implements Mechanized, Serializable {
 		return model;
 	}
 	
-	public String getDescription(){
-		return meta.getDescription();
-	}
-	
 	public FactoryMatrix getMatrix(){
 		return matrix;
 	}

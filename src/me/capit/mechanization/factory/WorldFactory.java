@@ -76,7 +76,7 @@ public class WorldFactory {
 				if (rec==null || running) return;
 				int fuelOffset = 0;
 				running = true;
-				while (rec!=null && valid() && validFurnacesForRecipe(rec, fuelOffset) && rec.getFuel()>fuelOffset){
+				while (rec!=null && valid() && validFurnacesForRecipe(rec, fuelOffset) && rec.getRecipe().getFuelCost()>fuelOffset){
 					try {
 						for (Furnace f : getFurnaces()){
 							ItemStack fuelIS = f.getInventory().getFuel();
@@ -97,7 +97,7 @@ public class WorldFactory {
 					rec = getInputRecipe();
 					fuelOffset++;
 				}
-				if (rec!=null && valid() && rec.getFuel()==fuelOffset) rec.setInventoryToOutput(chest.getBlockInventory());
+				if (rec!=null && valid() && rec.getRecipe().getFuelCost()==fuelOffset) rec.setInventoryToOutput(chest.getBlockInventory());
 				running = false;
 			}
 		}.runTaskLaterAsynchronously(Mechanization.plugin, 1L);
@@ -143,7 +143,7 @@ public class WorldFactory {
 			FurnaceInventory inv = fur.getInventory();
 			if (!(inv.getSmelting()==null || inv.getSmelting().getType()==Material.AIR)) return false; 
 			ItemStack fuelIS = fur.getInventory().getFuel();
-			if (fuelIS==null || fuelIS.getType()!=Material.COAL || fuelIS.getAmount()<recipe.getFuel()-fuelOffset) return false;
+			if (fuelIS==null || fuelIS.getType()!=Material.COAL || fuelIS.getAmount()<recipe.getRecipe().getFuelCost()-fuelOffset) return false;
 		}
 		return true;
 	}
