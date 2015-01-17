@@ -4,9 +4,6 @@
         <meta display="&amp;8Steel &amp;7Smelting" description="Smelts steel from iron and coal."/>
         <shape input=" C  C  C , CIICIIC , C SCS C " output="         ,  ss ss  ,   c c   " fuel_cost="16"/>
         <keys>
-            <!-- Like the factory matrix, any non-specified material/data will match any material/data respectively. -->
-            <!-- Precede materials with an '!' to use custom items defined in the items.xml file. -->
-            <!-- A comma (,) cannot be used as a key as it is a row separator. In addition, any undefined tags are treated as AIR. -->
             <key char="C" material="COAL" amount="8"/>
             <key char="I" material="IRON_INGOT" amount="16"/>
             <key char="S" material="STONE:0" amount="16"/>
