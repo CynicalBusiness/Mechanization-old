@@ -38,9 +38,9 @@ public class Mechanization extends JavaPlugin {
 		console = getServer().getConsoleSender();
 		plugin = this;
 		
-		console.sendMessage(ChatColor.WHITE+"---- "+ChatColor.YELLOW+"Mechanization"+ChatColor.WHITE+" -------------------");
+		info("---- "+ChatColor.YELLOW+"Mechanization"+ChatColor.WHITE+" -------------------");
 		
-		console.sendMessage(ChatColor.WHITE+"Initializing directories and loading defaults...");
+		info("Initializing directories and loading defaults...");
 		pluginDir = getDataFolder();
 		saveDefaultResource("items.xml");
 		saveDefaultResource("recipes.xml");
@@ -51,7 +51,7 @@ public class Mechanization extends JavaPlugin {
 		
 		try {
 			itemsFile = DataHandler.loadXMLFile(this, "items");
-			console.sendMessage(ChatColor.WHITE+"Loading items...");
+			info("Loading items...");
 			for (Child child : itemsFile.getChildren()){
 				if (child instanceof DataModel){
 					try {
@@ -64,56 +64,66 @@ public class Mechanization extends JavaPlugin {
 						item.setDisplayName(ChatColor.translateAlternateColorCodes('&', display.getValue()));
 						item.setLore(lore.getValue().split("\\|"));
 						ItemHandler.registerItem(item);
-						console.sendMessage(ChatColor.WHITE+"  Loaded "+item.getDisplayName());
+						info("Loaded "+item.getDisplayName());
 					} catch (IllegalArgumentException | NullPointerException | ClassCastException e){
-						console.sendMessage(ChatColor.RED+"  ERROR: "+ChatColor.WHITE+" Bad data member "+child.getName());
+						warn(e.getMessage());
 					}
 				} else {
-					console.sendMessage(ChatColor.RED+"  ERROR: "+ChatColor.WHITE+" Unknown member "+child.getName());
+					warn("Unknown member "+child.getName());
 				}
 			}
 		} catch (IOException | JDOMException e){
-			console.sendMessage(ChatColor.RED+"FAILED to load items!");
+			warn("Items could not be loaded!");
 			e.printStackTrace();
 		}
 		
 		try {
 			recipesFile = DataHandler.loadXMLFile(this, "recipes");
-			console.sendMessage(ChatColor.WHITE+"Loading recipes...");
+			info("Loading recipes...");
 			for (Child element : recipesFile.getChildren()){
 				try {
 					MechaFactoryRecipe mi = new MechaFactoryRecipe((DataModel) element);
 					recipes.put(mi.getName(), mi);
-					console.sendMessage(ChatColor.WHITE+"  Loaded "+mi.getDisplayName());
-				} catch (MechaException | ClassCastException e){
-					e.printStackTrace();
+					info("Loaded "+mi.getDisplayName());
+				} catch (MechaException e){
+					warn(e.getMessage());
 				}
 			}
 		} catch (IOException | JDOMException e){
-			console.sendMessage(ChatColor.RED+"FAILED to load recipes!");
+			warn("Recipes could not be loaded.");
 			e.printStackTrace();
 		}
 		
 		try {
 			factoriesFile = DataHandler.loadXMLFile(this, "factories");
-			console.sendMessage(ChatColor.WHITE+"Loading factories...");
+			info("Loading factories...");
 			for (Child element : factoriesFile.getChildren()){
 				try {
 					MechaFactory mi = new MechaFactory((DataModel) element);
 					factories.put(mi.getName(), mi);
-					console.sendMessage(ChatColor.WHITE+"  Loaded "+ChatColor.translateAlternateColorCodes('&', mi.getDisplayName()));
+					info("Loaded "+ChatColor.translateAlternateColorCodes('&', mi.getDisplayName()));
 				} catch (MechaException | ClassCastException e){
-					e.printStackTrace();
+					warn(e.getMessage());
 				}
 			}
 		} catch (IOException | JDOMException e){
-			console.sendMessage(ChatColor.RED+"FAILED to load factories!");
+			warn("Factories could not be loaded.");
 			e.printStackTrace();
 		}
 	}
 	
 	public void saveDefaultResource(String resource){
 		if (!new File(getDataFolder(), resource).exists()) saveResource(resource,false);
+	}
+	
+	public static void info(String msg){
+		console.sendMessage(ChatColor.WHITE+msg);
+	}
+	public static void warn(String msg){
+		console.sendMessage(ChatColor.YELLOW+"WARN "+ChatColor.WHITE+msg);
+	}
+	public static void error(String msg){
+		console.sendMessage(ChatColor.RED+"ERROR "+ChatColor.WHITE+msg);
 	}
 	
 }
