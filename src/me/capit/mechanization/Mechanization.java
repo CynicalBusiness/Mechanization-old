@@ -46,7 +46,7 @@ public class Mechanization extends JavaPlugin {
 		
 		this.getServer().getPluginManager().registerEvents(new MechaDataController(this), this);
 		
-		
+		newline();
 		try {
 			itemsFile = DataHandler.loadXMLFile(this, "items");
 			info("Loading items...");
@@ -75,6 +75,7 @@ public class Mechanization extends JavaPlugin {
 			e.printStackTrace();
 		}
 		
+		newline();
 		try {
 			recipesFile = DataHandler.loadXMLFile(this, "recipes");
 			info("Loading recipes...");
@@ -92,6 +93,7 @@ public class Mechanization extends JavaPlugin {
 			e.printStackTrace();
 		}
 		
+		newline();
 		try {
 			factoriesFile = DataHandler.loadXMLFile(this, "factories");
 			info("Loading factories...");
@@ -108,6 +110,10 @@ public class Mechanization extends JavaPlugin {
 			error("Factories could not be loaded.");
 			e.printStackTrace();
 		}
+		newline();
+		info("Done!");
+		
+		info("--------------------------------------");
 	}
 	
 	public void saveDefaultResource(String resource){
@@ -122,6 +128,9 @@ public class Mechanization extends JavaPlugin {
 	}
 	public static void error(String msg){
 		console.sendMessage(ChatColor.RED+"ERROR "+ChatColor.WHITE+msg);
+	}
+	public static void newline(){
+		info("");
 	}
 	
 }
