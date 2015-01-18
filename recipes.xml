@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <recipes>
     <recipe name="steel">
-        <meta display="&amp;8Steel &amp;7Smelting" description="Smelts steel from iron and coal."/>
+        <meta display_name="&amp;8Steel &amp;7Smelting" description="Smelts steel from iron and coal."/>
         <shape input=" C  C  C , CIICIIC , C SCS C " output="         ,  ss ss  ,   c c   " fuel_cost="16"/>
         <keys>
             <key char="C" material="COAL" amount="8"/>
@@ -12,7 +12,7 @@
         </keys>
     </recipe>
     <recipe name="iron">
-        <meta display="&amp;7Iron Smelting" description="A more efficient way of refining iron."/>
+        <meta display_name="&amp;7Iron Smelting" description="A more efficient way of refining iron."/>
         <shape input=" C  C  C ,sississis, s  s  s " output="         ,gIggcggIg, c  c  c " fuel_cost="4"/>
         <keys>
             <key char="C" material="COAL" amount="4"/>
@@ -24,7 +24,7 @@
         </keys>
     </recipe>
     <recipe name="gold">
-        <meta display="&amp;eGold &amp;7Smelting" description="A more efficient way of refining gold."/>
+        <meta display_name="&amp;eGold &amp;7Smelting" description="A more efficient way of refining gold."/>
         <shape input=" C  C  C ,sississis, s  s  s " output="         ,gIggcggIg, c  c  c " fuel_cost="8"/>
         <keys>
             <key char="C" material="COAL" amount="4"/>
@@ -36,7 +36,7 @@
         </keys>
     </recipe>
     <recipe name="factory_wrench">
-        <meta display="&amp;7Wrench &amp;fProduction" description="Makes two factory wrenches."/>
+        <meta display_name="&amp;7Wrench &amp;fProduction" description="Makes two factory wrenches."/>
         <shape input="   I I   ,ssOIDIOss,   I I   " output="         ,   W W   ,         " fuel_cost="16"/>
         <keys>
             <key char="I" material="IRON_INGOT" amount="2"/>
@@ -47,7 +47,7 @@
         </keys>
     </recipe>
     <recipe name="glowstone">
-        <meta display="&amp;6Glowstone Production" description="Makes more glowstone than usual."/>
+        <meta display_name="&amp;6Glowstone Production" description="Makes more glowstone than usual."/>
         <shape input="ggrggrggr,tggtggtgg,ggrggrggr" output="G  G  G  , G  G  G ,  G  G  G" fuel_cost="16"/>
         <keys>
             <key char="g" material="GOWSTONE_DUST" amount="1"/>
