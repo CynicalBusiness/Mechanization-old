@@ -25,17 +25,17 @@ Alpha Versions
 - `DEL` The factory `color` attribute was removed. The `display_name` attribute now parses color.
 - `DEL` The data attribute has been removed in all instances in favor of the latter mentioned material system.
 - `DEL` A lot of the comments were removed from XML files and put on the wiki.
-  - **1.02.01**
+- **1.02.01**
   - `FIX` Replaced the EntropyAPI with a different version.
   - `FIX` JDOM issues have been resolved. (I hate bukkit's class loader)
-  - **1.02.02**
+- **1.02.02**
   - `FIX` Large code rework because the EntropyAPI was not effectively communicating.
   - `FIX` Fixed a strange comparison in the recipe parser.
   - `FIX` Fixed a derp with COBBLE_WALL. For some reason, the data was 2 instead of 0.
-  - **1.02.03**
+- **1.02.03**
   - `FIX` Fixed factories sometimes setting the chest's inventory to the input when finished.
   - `FIX` Fixed the `steel` item not correctly loading from the EntropyAPI.
-  - **1.02.04**
+- **1.02.04**
   - `FIX` Changed the meta `display` property to `display_name`. The display name now correctly loads.
   - `FIX` The *Saw Mill* now has correct dimensions.
   - `FIX` The *Gem Smelter*'s `name` attribute was fixed.
