@@ -41,3 +41,6 @@ Alpha Versions
   - `FIX` The *Gem Smelter*'s `name` attribute was fixed.
   - `FIX` The *Kiln* and *Gem Smelter* now actually load recipes.
   - `FIX` The *Kiln*, *Saw Mill*, and *Gem Smelter* now correctly display colors.
+- **1.02.05**
+  - `ADD` Missing custom items or recipes will now result in `WARN` message.
+  - `MOD` If something fails to load completely, it now raises an `ERR` message instead of `WARN`.
