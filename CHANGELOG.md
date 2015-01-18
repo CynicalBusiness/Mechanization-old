@@ -44,3 +44,4 @@ Alpha Versions
 - **1.02.05**
   - `ADD` Missing custom items or recipes will now result in `WARN` message.
   - `MOD` If something fails to load completely, it now raises an `ERR` message instead of `WARN`.
+  - `FIX` Fixed the recipe `display_name` property.
