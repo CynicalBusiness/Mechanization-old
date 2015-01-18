@@ -23,11 +23,14 @@ public class FactoryDataParser {
 		act_damage = data.hasAttribute("damage") ? getInt(data.getAttribute("damage").getValueString()) : 0;
 		
 		activator = new MaterialParser(data.hasAttribute("activator") ? data.getAttribute("activator").getValueString() : null);
-		if (activator.isWildcard()) Mechanization.warn("Factory "+factory.getName()+" has a wildcard activator.");
+		if (activator.isWildcard()) Mechanization.warn(factory.getName()+": Wildcard activator registered. Is the format valid?");
 		
 		recipes = data.hasAttribute("recipes") ? data.getAttribute("recipes").getValueString().split("\\,") : new String[0];
-		for (int i=0; i<recipes.length; i++) recipes[i] = recipes[i].trim();
-		if (recipes.length==0) Mechanization.warn("Factory "+factory.getName()+" has no registered recipes.");
+		for (int i=0; i<recipes.length; i++){
+			recipes[i] = recipes[i].trim();
+			if (!Mechanization.recipes.containsKey(recipes[i])) Mechanization.warn(factory.getName()+": Missing recipe '"+recipes[i]+"'.");
+		}
+		if (recipes.length==0) Mechanization.warn(factory.getName()+": No recipes registered. Is the format valid?");
 	}
 	
 	private int getInt(String dataval){

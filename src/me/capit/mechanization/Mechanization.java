@@ -67,11 +67,11 @@ public class Mechanization extends JavaPlugin {
 						warn(e.getMessage());
 					}
 				} else {
-					warn("Unknown member "+child.getName());
+					error("Unknown member "+child.getName());
 				}
 			}
 		} catch (Exception e){
-			warn("Items could not be loaded!");
+			error("Items could not be loaded!");
 			e.printStackTrace();
 		}
 		
@@ -84,11 +84,11 @@ public class Mechanization extends JavaPlugin {
 					recipes.put(mi.getName(), mi);
 					info("Loaded "+mi.getDisplayName());
 				} catch (MechaException e){
-					warn(e.getMessage());
+					error(e.getMessage());
 				}
 			}
 		} catch (Exception e){
-			warn("Recipes could not be loaded.");
+			error("Recipes could not be loaded.");
 			e.printStackTrace();
 		}
 		
@@ -101,11 +101,11 @@ public class Mechanization extends JavaPlugin {
 					factories.put(mi.getName(), mi);
 					info("Loaded "+ChatColor.translateAlternateColorCodes('&', mi.getDisplayName()));
 				} catch (MechaException | ClassCastException e){
-					warn(e.getMessage());
+					error(e.getMessage());
 				}
 			}
 		} catch (Exception e){
-			warn("Factories could not be loaded.");
+			error("Factories could not be loaded.");
 			e.printStackTrace();
 		}
 	}

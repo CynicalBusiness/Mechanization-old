@@ -5,6 +5,8 @@ import java.util.Random;
 import me.capit.eapi.item.GameItem;
 import me.capit.eapi.item.ItemHandler;
 
+import me.capit.mechanization.Mechanization;
+
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -56,6 +58,7 @@ public class MaterialParser {
 		for (int i=0; i<mats.length; i++){
 			if (mats[i].startsWith("!")){
 				GameItem item = ItemHandler.getItem(mats[i]);
+				if (item==null) Mechanization.warn("Unknown custom item '"+mats[i]+"'.");
 				stacks[i] = item!=null ? item.getItemStack(amounts[i], dmgs[i]>=0 ? dmgs[i] : 0) : null;
 			} else {
 				try {
