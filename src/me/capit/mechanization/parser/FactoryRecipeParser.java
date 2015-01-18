@@ -16,7 +16,7 @@ public class FactoryRecipeParser {
 	
 	public FactoryRecipeParser(MechaFactoryRecipe recipe) throws MechaException {
 		Child shapechild = recipe.getModel().findFirstChild("shape");
-		if (shapechild!=null || !(shapechild instanceof DataModel)) throw new MechaException(recipe, "Key data missing or invalid.");
+		if (shapechild==null || !(shapechild instanceof DataModel)) throw new MechaException(recipe, "Shape data missing or invalid.");
 		DataModel matrixmodel = (DataModel) shapechild;
 		
 		try {
@@ -34,7 +34,7 @@ public class FactoryRecipeParser {
 		
 		
 		Child keychild = recipe.getModel().findFirstChild("keys");
-		if (keychild!=null || !(keychild instanceof DataModel)) throw new MechaException(recipe, "Key data missing or invalid.");
+		if (keychild==null || !(keychild instanceof DataModel)) throw new MechaException(recipe, "Key data missing or invalid.");
 		DataModel keymodel = (DataModel) keychild;
 		
 		keys = new RecipeMatrixKey[keymodel.getChildren().size()];

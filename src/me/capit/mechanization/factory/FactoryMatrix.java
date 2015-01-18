@@ -37,11 +37,26 @@ public class FactoryMatrix {
 		MechaException matrixErr = new MechaException(factory, "Matrix is not of correct size: "+dims.x+","+dims.y+","+dims.z);
 		try {
 			matrix = new DataModel[(int) dims.y][(int) dims.z][(int) dims.x];
-			for (int j = 0; j<dims.y; j++) for (int k = 0; k<dims.z; k++) for (int l = 0; l<dims.x; l++) 
-				matrix[j][k][l] = (DataModel) ((DataModel) ((DataModel) model.getChildren().get(j)).getChildren().get(k)).getChildren().get(l);
+			//for (int j = 0; j<dims.y; j++) for (int k = 0; k<dims.z; k++) for (int l = 0; l<dims.x; l++) 
+			//	matrix[j][k][l] = (DataModel) ((DataModel) ((DataModel) model.getChildren().get(j)).getChildren().get(k)).getChildren().get(l);
+			
+			for (int j=0; j<dims.y; j++){
+				DataModel[][] y = new DataModel[(int) dims.z][(int) dims.x];
+				DataModel cy = (DataModel) model.getChildren().get(j);
+				for (int k=0; k<dims.z; k++){
+					DataModel[] z = new DataModel[(int) dims.x];
+					DataModel cz = (DataModel) cy.getChildren().get(k);
+					for (int l=0; l<dims.x; l++){
+						DataModel cx = (DataModel) cz.getChildren().get(l);
+						z[l] = cx;
+					}
+					y[k] = z;
+				}
+				matrix[j] = y;
+			}
 				
 			if (!isValid(Material.CHEST, (byte) 0, chestLoc)) throw new MechaException(factory, "Chest is not in the correct location.");
-		} catch (NullPointerException | IllegalArgumentException e){
+		} catch (NullPointerException | IllegalArgumentException | IndexOutOfBoundsException e){
 			throw matrixErr;
 		}
 		if (glitchInMatrix()) throw matrixErr;

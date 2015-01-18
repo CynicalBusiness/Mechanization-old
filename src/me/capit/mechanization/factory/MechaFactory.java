@@ -15,7 +15,6 @@ import me.capit.mechanization.Mechanized;
 import me.capit.mechanization.exception.MechaException;
 import me.capit.mechanization.parser.FactoryDataParser;
 import me.capit.mechanization.parser.MetaParser;
-import me.capit.mechanization.recipe.RecipeMatrix;
 import me.capit.mechanization.recipe.MechaFactoryRecipe;
 
 public class MechaFactory implements Mechanized, Serializable {
@@ -66,7 +65,7 @@ public class MechaFactory implements Mechanized, Serializable {
 	
 	public boolean applyActivatorEffects(ItemStack activator){
 		if (!validActivator(activator) || activator.getAmount()<data.getActivatorConsumption()) return false;
-		activator.setDurability((short) (activator.getDurability()-data.getActivatorDamage()));
+		activator.setDurability((short) (activator.getDurability()+data.getActivatorDamage()));
 		if (activator.getAmount()==data.getActivatorConsumption()) activator.setType(Material.AIR);
 		else activator.setAmount(activator.getAmount()-data.getActivatorConsumption());
 		return true;
@@ -103,9 +102,5 @@ public class MechaFactory implements Mechanized, Serializable {
 	
 	public List<Vector3> getFurnaceLocations(){
 		return matrix.getLocationsOfMaterial(Material.FURNACE, 0);
-	}
-	
-	public void setInventoryToOutput(Inventory inv, MechaFactoryRecipe recipe){
-		if (inv.getSize()==RecipeMatrix.matrixHeight*RecipeMatrix.matrixWidth) recipe.setInventoryToOutput(inv);
 	}
 }

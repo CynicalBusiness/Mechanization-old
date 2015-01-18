@@ -19,7 +19,7 @@ public class MechaFactoryRecipe implements Mechanized, Serializable {
 	private DataModel model;
 	
 	public MechaFactoryRecipe(DataModel model) throws MechaException {
-		if (!model.getName().equals("factory")) throw new MechaException(this, "Model name is not 'recipe'!");
+		if (!model.getName().equals("recipe")) throw new MechaException(this, "Model name is not 'recipe'!");
 		if (!model.hasAttribute("name")) throw new MechaException(this, "Name attribute is missing.");
 		name = model.getAttribute("name").getValueString();
 		this.model = model;
@@ -56,10 +56,10 @@ public class MechaFactoryRecipe implements Mechanized, Serializable {
 		return true;
 	}
 	
-	public void setInventoryToOutput(Inventory inv){
+	public void updateInventoryToOutput(Inventory inv){
 		inv.clear();
-		for (int i=0; i<27; i++){
-			RecipeMatrixKey key = getRecipe().getKey(getRecipe().getInput().getCharAtSlot(i));
+		for (int i=0; i<inv.getSize(); i++){
+			RecipeMatrixKey key = getRecipe().getKey(getRecipe().getOutput().getCharAtSlot(i));
 			inv.setItem(i, key.getMaterial().getOutput(key.getAmount()));
 		}
 	}

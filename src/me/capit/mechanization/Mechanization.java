@@ -1,7 +1,6 @@
 package me.capit.mechanization;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
@@ -20,7 +19,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jdom2.JDOMException;
 
 public class Mechanization extends JavaPlugin {
 	public static final HashMap<String, MechaFactoryRecipe> recipes = new HashMap<String, MechaFactoryRecipe>();
@@ -72,7 +70,7 @@ public class Mechanization extends JavaPlugin {
 					warn("Unknown member "+child.getName());
 				}
 			}
-		} catch (IOException | JDOMException e){
+		} catch (Exception e){
 			warn("Items could not be loaded!");
 			e.printStackTrace();
 		}
@@ -89,7 +87,7 @@ public class Mechanization extends JavaPlugin {
 					warn(e.getMessage());
 				}
 			}
-		} catch (IOException | JDOMException e){
+		} catch (Exception e){
 			warn("Recipes could not be loaded.");
 			e.printStackTrace();
 		}
@@ -106,7 +104,7 @@ public class Mechanization extends JavaPlugin {
 					warn(e.getMessage());
 				}
 			}
-		} catch (IOException | JDOMException e){
+		} catch (Exception e){
 			warn("Factories could not be loaded.");
 			e.printStackTrace();
 		}

@@ -100,7 +100,7 @@ public class MaterialParser {
 	public boolean isInput(ItemStack stack, boolean ignoreAmount){
 		if (wildcard) return true;
 		if (stack==null) return hasMaterial(Material.AIR);
-		ItemStack[] stacks = ignoreAmount ? getStacks() : getStacks(stack.getAmount());
+		ItemStack[] stacks = getStacks(stack.getAmount());
 		for (int i=0; i<stacks.length; i++){
 			if (ItemHandler.stackEquals(stacks[i], stack, ignoreAmount, dmgs[i]<0)) return true;
 		}

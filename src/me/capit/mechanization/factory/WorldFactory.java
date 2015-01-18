@@ -97,7 +97,11 @@ public class WorldFactory {
 					rec = getInputRecipe();
 					fuelOffset++;
 				}
-				if (rec!=null && valid() && rec.getRecipe().getFuelCost()==fuelOffset) rec.setInventoryToOutput(chest.getBlockInventory());
+				System.out.println("finished");
+				if (rec!=null && valid() && rec.getRecipe().getFuelCost()==fuelOffset){
+					rec.updateInventoryToOutput(chest.getBlockInventory());
+					System.out.println("set inventory");
+				}
 				running = false;
 			}
 		}.runTaskLaterAsynchronously(Mechanization.plugin, 1L);

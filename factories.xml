@@ -23,11 +23,11 @@
 	        </matrixY>
 	        <matrixY>
 	            <matrixZ>
-	                <matrixX material="COBBLE_WALL:2"/>
+	                <matrixX material="COBBLE_WALL:0"/>
 	                <matrixX material="FENCE"/>
 	                <matrixX/>
 	                <matrixX material="FENCE"/>
-	                <matrixX material="COBBLE_WALL:2"/>
+	                <matrixX material="COBBLE_WALL:0"/>
 	            </matrixZ>
 	            <matrixZ>
 	                <matrixX material="LOG|LOG_2"/>
