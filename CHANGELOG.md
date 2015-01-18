@@ -45,3 +45,6 @@ Alpha Versions
   - `ADD` Missing custom items or recipes will now result in `WARN` message.
   - `MOD` If something fails to load completely, it now raises an `ERR` message instead of `WARN`.
   - `FIX` Fixed the recipe `display_name` property.
+- **1.02.06**
+  - `ADD` Added some line breaks in the start-up logs.
+  - `ADD` The plugin now outputs a rule when it has finished enabling.
