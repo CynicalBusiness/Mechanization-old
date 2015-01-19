@@ -2,8 +2,8 @@ package me.capit.mechanization.recipe;
 
 import me.capit.eapi.data.Child;
 import me.capit.eapi.data.DataModel;
+import me.capit.eapi.item.MaterialParser;
 import me.capit.mechanization.Mechanization;
-import me.capit.mechanization.parser.MaterialParser;
 
 
 public class RecipeMatrixKey {

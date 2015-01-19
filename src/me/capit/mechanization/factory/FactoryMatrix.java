@@ -5,9 +5,9 @@ import java.util.List;
 
 import me.capit.eapi.data.Child;
 import me.capit.eapi.data.DataModel;
+import me.capit.eapi.item.MaterialParser;
 import me.capit.eapi.math.Vector3;
 import me.capit.mechanization.exception.MechaException;
-import me.capit.mechanization.parser.MaterialParser;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
