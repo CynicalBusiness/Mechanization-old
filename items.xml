@@ -6,6 +6,22 @@
     </item>
     <item name="steel_pickaxe" material="IRON_PICKAXE">
         <data-value name="display">&amp;7Steel Pickaxe</data-value>
-        <data-value name="lore">A steel Pickaxe</data-value>
+        <data-value name="lore">&amp;fJust a &amp;obit &amp;fstronger than iron.</data-value>
+    </item>
+    <item name="concrete" material="CLAY_BALL">
+        <data-value name="display">&amp;fWet &amp;7Concrete</data-value>
+        <data-value name="lore">Somehow still wet.</data-value>
+    </item>
+    <item name="rebar" material="STICK">
+        <data-value name="display">&amp;eRebar</data-value>
+        <data-value name="lore">&amp;7A durable metal rod.</data-value>
+    </item>
+    <item name="steel_frame" material="BOAT">
+        <data-value name="display">&amp;7Steel Frame</data-value>
+        <data-value name="lore">It also floats.</data-value>
+    </item>
+    <item name="diamond_frame" material="MINECART">
+        <data-value name="display">&amp;3Diamond &amp;7Reinfoced Frame</data-value>
+        <data-value name="lore">Glides on rails pretty well.</data-value>
     </item>
 </items>
